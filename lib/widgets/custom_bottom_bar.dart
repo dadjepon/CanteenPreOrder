@@ -1,4 +1,4 @@
-import 'package:canteenpreorder/core/app_export.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomBar extends StatelessWidget {
@@ -13,28 +13,24 @@ class CustomBottomBar extends StatelessWidget {
 
   List<BottomMenuModel> bottomMenuList = [
     BottomMenuModel(
-      icon: ImageConstant.imgVectorWhiteA700,
-      activeIcon: ImageConstant.imgVectorWhiteA700,
-      title: "lbl_22".tr,
-      type: BottomBarEnum.tf,
+      icon: ImageConstant.imgHome,
+      activeIcon: ImageConstant.imgHome,
+      type: BottomBarEnum.Home,
     ),
     BottomMenuModel(
-      icon: ImageConstant.imgVectorWhiteA70020x20,
-      activeIcon: ImageConstant.imgVectorWhiteA70020x20,
-      title: "lbl_22".tr,
-      type: BottomBarEnum.tf,
+      icon: ImageConstant.imgSearchWhiteA70001,
+      activeIcon: ImageConstant.imgSearchWhiteA70001,
+      type: BottomBarEnum.Searchwhitea70001,
     ),
     BottomMenuModel(
-      icon: ImageConstant.imgVectorPrimary,
-      activeIcon: ImageConstant.imgVectorPrimary,
-      title: "lbl_22".tr,
-      type: BottomBarEnum.tf,
+      icon: ImageConstant.imgCart,
+      activeIcon: ImageConstant.imgCart,
+      type: BottomBarEnum.Cart,
     ),
     BottomMenuModel(
-      icon: ImageConstant.imgVector20x20,
-      activeIcon: ImageConstant.imgVector20x20,
-      title: "lbl_22".tr,
-      type: BottomBarEnum.tf,
+      icon: ImageConstant.imgUser,
+      activeIcon: ImageConstant.imgUser,
+      type: BottomBarEnum.User,
     )
   ];
 
@@ -42,8 +38,18 @@ class CustomBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 33.v,
+    return Container(
+      height: 64.v,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment(0.5, 0),
+          end: Alignment(0.5, 1),
+          colors: [
+            appTheme.blueGray400,
+            appTheme.blueGray400,
+          ],
+        ),
+      ),
       child: Obx(
         () => BottomNavigationBar(
           backgroundColor: Colors.transparent,
@@ -57,63 +63,15 @@ class CustomBottomBar extends StatelessWidget {
             return BottomNavigationBarItem(
               icon: CustomImageView(
                 imagePath: bottomMenuList[index].icon,
+                height: 20.adaptSize,
+                width: 20.adaptSize,
+                color: appTheme.whiteA70001,
+              ),
+              activeIcon: CustomImageView(
+                imagePath: bottomMenuList[index].activeIcon,
                 height: 17.v,
                 width: 20.h,
-                color: appTheme.whiteA700,
-              ),
-              activeIcon: SizedBox(
-                height: 33.v,
-                width: 26.h,
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    CustomImageView(
-                      imagePath: bottomMenuList[index].activeIcon,
-                      height: 20.adaptSize,
-                      width: 20.adaptSize,
-                      color: theme.colorScheme.primary,
-                      alignment: Alignment.bottomLeft,
-                      margin: EdgeInsets.only(
-                        top: 12.v,
-                        right: 6.h,
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        height: 14.adaptSize,
-                        width: 14.adaptSize,
-                        margin: EdgeInsets.only(
-                          left: 12.h,
-                          top: 1.v,
-                          bottom: 17.v,
-                        ),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.primary,
-                          borderRadius: BorderRadius.circular(
-                            7.h,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: 16.h,
-                          right: 4.h,
-                          bottom: 18.v,
-                        ),
-                        child: Text(
-                          bottomMenuList[index].title ?? "",
-                          style: theme.textTheme.bodySmall!.copyWith(
-                            color: appTheme.whiteA700,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                color: theme.colorScheme.primary,
               ),
               label: '',
             );
@@ -129,22 +87,22 @@ class CustomBottomBar extends StatelessWidget {
 }
 
 enum BottomBarEnum {
-  tf,
+  Home,
+  Searchwhitea70001,
+  Cart,
+  User,
 }
 
 class BottomMenuModel {
   BottomMenuModel({
     required this.icon,
     required this.activeIcon,
-    this.title,
     required this.type,
   });
 
   String icon;
 
   String activeIcon;
-
-  String? title;
 
   BottomBarEnum type;
 }

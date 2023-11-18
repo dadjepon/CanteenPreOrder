@@ -1,4 +1,4 @@
-import 'package:canteenpreorder/core/app_export.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
 import 'package:flutter/material.dart';
 
 class BaseButton extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:canteenpreorder/core/app_export.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
 import 'package:flutter/material.dart';
 
 /// A class that offers pre-defined button styles for customizing button appearance.
@@ -15,6 +15,12 @@ class CustomButtonStyles {
         backgroundColor: theme.colorScheme.primaryContainer,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.h),
+        ),
+      );
+  static ButtonStyle get fillWhiteA => ElevatedButton.styleFrom(
+        backgroundColor: appTheme.whiteA700,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.h),
         ),
       );
 

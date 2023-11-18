@@ -1,5 +1,5 @@
 import 'controller/app_navigation_controller.dart';
-import 'package:canteenpreorder/core/app_export.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
 import 'package:flutter/material.dart';
 
 // ignore_for_file: must_be_immutable
@@ -35,19 +35,39 @@ class AppNavigationScreen extends GetWidget<AppNavigationController> {
                               AppRoutes.studentsAndFacultySfOneScreen),
                         ),
                         _buildScreenTitle(
+                          screenTitle: "SF - Dashbord One - Container".tr,
+                          onTapScreenTitle: () => onTapScreenTitle(
+                              AppRoutes.sfDashbordOneContainer1Screen),
+                        ),
+                        _buildScreenTitle(
+                          screenTitle: "SF - Dashbord".tr,
+                          onTapScreenTitle: () =>
+                              onTapScreenTitle(AppRoutes.sfDashbordScreen),
+                        ),
+                        _buildScreenTitle(
+                          screenTitle: "SF - Item view One".tr,
+                          onTapScreenTitle: () =>
+                              onTapScreenTitle(AppRoutes.sfItemViewOneScreen),
+                        ),
+                        _buildScreenTitle(
                           screenTitle: "SF - Cart view".tr,
                           onTapScreenTitle: () =>
                               onTapScreenTitle(AppRoutes.sfCartViewScreen),
                         ),
                         _buildScreenTitle(
-                          screenTitle: "SF - Delivery option".tr,
-                          onTapScreenTitle: () => onTapScreenTitle(
-                              AppRoutes.sfDeliveryOptionScreen),
+                          screenTitle: "SF - Profile".tr,
+                          onTapScreenTitle: () =>
+                              onTapScreenTitle(AppRoutes.sfProfileScreen),
                         ),
                         _buildScreenTitle(
-                          screenTitle: "SF - Orders - Container".tr,
-                          onTapScreenTitle: () => onTapScreenTitle(
-                              AppRoutes.sfOrdersContainerScreen),
+                          screenTitle: "SF - Orders".tr,
+                          onTapScreenTitle: () =>
+                              onTapScreenTitle(AppRoutes.sfOrdersScreen),
+                        ),
+                        _buildScreenTitle(
+                          screenTitle: "SF - Item view".tr,
+                          onTapScreenTitle: () =>
+                              onTapScreenTitle(AppRoutes.sfItemViewScreen),
                         ),
                       ],
                     ),

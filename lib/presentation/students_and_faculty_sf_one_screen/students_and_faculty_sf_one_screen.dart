@@ -1,6 +1,6 @@
 import 'controller/students_and_faculty_sf_one_controller.dart';
-import 'package:canteenpreorder/core/app_export.dart';
-import 'package:canteenpreorder/widgets/custom_elevated_button.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
+import 'package:canteenpreorderapp/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 
 // ignore_for_file: must_be_immutable
@@ -28,7 +28,7 @@ class StudentsAndFacultySfOneScreen
               end: Alignment(0.5, 1.01),
               colors: [
                 theme.colorScheme.onErrorContainer,
-                theme.colorScheme.secondaryContainer,
+                theme.colorScheme.onPrimaryContainer,
               ],
             ),
           ),
@@ -36,74 +36,23 @@ class StudentsAndFacultySfOneScreen
             width: double.maxFinite,
             padding: EdgeInsets.symmetric(
               horizontal: 54.h,
-              vertical: 61.v,
+              vertical: 1.v,
             ),
             child: Column(
               children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    height: 99.v,
-                    width: 210.h,
-                    margin: EdgeInsets.only(right: 21.h),
-                    child: Stack(
-                      alignment: Alignment.topCenter,
-                      children: [
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "lbl_f".tr,
-                                  style: CustomTextStyles
-                                      .displaySmallMochiyPopOneYellowA400_1,
-                                ),
-                                TextSpan(
-                                  text: "lbl_ood".tr,
-                                  style: CustomTextStyles
-                                      .displaySmallMochiyPopOneWhiteA700,
-                                ),
-                                TextSpan(
-                                  text: "lbl_e".tr,
-                                  style: CustomTextStyles
-                                      .displaySmallMochiyPopOneYellowA400_1,
-                                ),
-                                TextSpan(
-                                  text: "lbl_ase".tr,
-                                  style: CustomTextStyles
-                                      .displaySmallMochiyPopOneWhiteA700,
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            "lbl_logo".tr,
-                            style: CustomTextStyles.displaySmallWhiteA700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.v),
                 SizedBox(
-                  height: 254.v,
+                  height: 435.v,
                   width: 281.h,
                   child: Stack(
-                    alignment: Alignment.center,
+                    alignment: Alignment.bottomLeft,
                     children: [
                       Align(
-                        alignment: Alignment.center,
+                        alignment: Alignment.bottomCenter,
                         child: Container(
                           height: 254.v,
                           width: 281.h,
                           decoration: BoxDecoration(
-                            color: appTheme.whiteA700,
+                            color: appTheme.gray200,
                             borderRadius: BorderRadius.circular(
                               140.h,
                             ),
@@ -114,7 +63,14 @@ class StudentsAndFacultySfOneScreen
                         imagePath: ImageConstant.imgGrillChickenSpicy,
                         height: 245.v,
                         width: 246.h,
-                        alignment: Alignment.center,
+                        alignment: Alignment.bottomLeft,
+                        margin: EdgeInsets.only(bottom: 14.v),
+                      ),
+                      CustomImageView(
+                        imagePath: ImageConstant.imgScreenshot2023,
+                        height: 182.v,
+                        width: 237.h,
+                        alignment: Alignment.topCenter,
                       ),
                     ],
                   ),
@@ -134,11 +90,21 @@ class StudentsAndFacultySfOneScreen
                     style: theme.textTheme.headlineLarge,
                   ),
                 ),
-                Spacer(),
-                SizedBox(height: 44.v),
+                Spacer(
+                  flex: 50,
+                ),
                 CustomElevatedButton(
+                  height: 50.v,
                   text: "lbl_get_started".tr,
                   margin: EdgeInsets.symmetric(horizontal: 21.h),
+                  buttonStyle: CustomButtonStyles.fillWhiteA,
+                  buttonTextStyle: CustomTextStyles.headlineSmallMochiyPopOne,
+                  onPressed: () {
+                    onTapGetStartedButton();
+                  },
+                ),
+                Spacer(
+                  flex: 49,
                 ),
               ],
             ),
@@ -146,5 +112,9 @@ class StudentsAndFacultySfOneScreen
         ),
       ),
     );
+  }
+
+  onTapGetStartedButton() {
+    Get.toNamed(AppRoutes.sfDashbordOneContainer1Screen);
   }
 }

@@ -1,5 +1,5 @@
 import 'controller/sf_order_details_controller.dart';
-import 'package:canteenpreorder/core/app_export.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
 import 'package:flutter/material.dart';
 
 class SfOrderDetailsDialog extends StatelessWidget {
@@ -61,7 +61,7 @@ class SfOrderDetailsDialog extends StatelessWidget {
                     bottom: 20.v,
                   ),
                   child: Text(
-                    "lbl_ghc_30".tr,
+                    "lbl_ghc_302".tr,
                     style: theme.textTheme.titleSmall,
                   ),
                 ),
@@ -69,44 +69,13 @@ class SfOrderDetailsDialog extends StatelessWidget {
             ),
           ),
           SizedBox(height: 56.v),
-          Align(
-            alignment: Alignment.center,
-            child: SizedBox(
-              height: 37.v,
-              width: 257.h,
-              child: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  CustomImageView(
-                    imagePath: ImageConstant.imgBiCreditCard2FrontFill,
-                    height: 37.v,
-                    width: 17.h,
-                    alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.only(left: 41.h),
-                  ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 5.v),
-                      child: Text(
-                        "msg_some_information".tr,
-                        style: theme.textTheme.bodyMedium,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          CustomImageView(
+            imagePath: ImageConstant.imgBiCreditCard2FrontFillWhiteA70001,
+            height: 37.v,
+            width: 17.h,
+            margin: EdgeInsets.only(left: 53.h),
           ),
-          SizedBox(height: 32.v),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              "msg_some_information".tr,
-              style: theme.textTheme.bodyMedium,
-            ),
-          ),
-          SizedBox(height: 103.v),
+          SizedBox(height: 159.v),
           Padding(
             padding: EdgeInsets.only(
               left: 18.h,
@@ -120,8 +89,8 @@ class SfOrderDetailsDialog extends StatelessWidget {
                   style: CustomTextStyles.titleSmallBlack900,
                 ),
                 Text(
-                  "lbl_pick_up2".tr,
-                  style: CustomTextStyles.bodyMediumRegular14,
+                  "lbl_pick_up".tr,
+                  style: CustomTextStyles.bodyMediumRegular,
                 ),
               ],
             ),

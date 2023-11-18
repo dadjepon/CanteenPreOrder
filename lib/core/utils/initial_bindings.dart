@@ -1,5 +1,5 @@
-import 'package:canteenpreorder/core/app_export.dart';
-import 'package:canteenpreorder/data/apiClient/api_client.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
+import 'package:canteenpreorderapp/data/apiClient/api_client.dart';
 
 class InitialBindings extends Bindings {
   @override

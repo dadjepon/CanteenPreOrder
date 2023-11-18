@@ -1,4 +1,4 @@
-import 'package:canteenpreorder/core/app_export.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -23,7 +23,7 @@ class CustomTextFormField extends StatelessWidget {
     this.contentPadding,
     this.borderDecoration,
     this.fillColor,
-    this.filled = true,
+    this.filled = false,
     this.validator,
   }) : super(
           key: key,
@@ -87,7 +87,7 @@ class CustomTextFormField extends StatelessWidget {
           controller: controller,
           focusNode: focusNode ?? FocusNode(),
           autofocus: autofocus!,
-          style: textStyle ?? CustomTextStyles.titleMedium18,
+          style: textStyle ?? CustomTextStyles.titleMediumMedium,
           obscureText: obscureText!,
           textInputAction: textInputAction,
           keyboardType: textInputType,
@@ -98,43 +98,32 @@ class CustomTextFormField extends StatelessWidget {
       );
   InputDecoration get decoration => InputDecoration(
         hintText: hintText ?? "",
-        hintStyle: hintStyle ?? CustomTextStyles.titleMedium18,
+        hintStyle: hintStyle ?? CustomTextStyles.titleMediumMedium,
         prefixIcon: prefix,
         prefixIconConstraints: prefixConstraints,
         suffixIcon: suffix,
         suffixIconConstraints: suffixConstraints,
         isDense: true,
-        contentPadding: contentPadding ??
-            EdgeInsets.only(
-              left: 16.h,
-              top: 16.v,
-              bottom: 16.v,
-            ),
-        fillColor: fillColor ?? appTheme.whiteA700,
+        contentPadding: contentPadding,
+        fillColor: fillColor,
         filled: filled,
         border: borderDecoration ??
-            OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20.h),
-              borderSide: BorderSide.none,
+            UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: appTheme.black900.withOpacity(0.46),
+              ),
             ),
         enabledBorder: borderDecoration ??
-            OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20.h),
-              borderSide: BorderSide.none,
+            UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: appTheme.black900.withOpacity(0.46),
+              ),
             ),
         focusedBorder: borderDecoration ??
-            OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20.h),
-              borderSide: BorderSide.none,
+            UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: appTheme.black900.withOpacity(0.46),
+              ),
             ),
-      );
-}
-
-/// Extension on [CustomTextFormField] to facilitate inclusion of all types of border style etc
-extension TextFormFieldStyleHelper on CustomTextFormField {
-  static UnderlineInputBorder get underLineBlack => UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: appTheme.black900.withOpacity(0.46),
-        ),
       );
 }
