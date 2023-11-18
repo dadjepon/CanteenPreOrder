@@ -1,5 +1,5 @@
-import 'package:canteenpreorder/core/app_export.dart';
-import 'package:canteenpreorder/presentation/sf_cart_view_screen/models/sf_cart_view_model.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
+import 'package:canteenpreorderapp/presentation/sf_cart_view_screen/models/sf_cart_view_model.dart';
 
 /// A controller class for the SfCartViewScreen.
 ///

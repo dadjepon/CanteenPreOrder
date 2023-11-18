@@ -1,5 +1,5 @@
-import 'package:canteenpreorder/core/app_export.dart';
-import 'package:canteenpreorder/presentation/students_and_faculty_sf_one_screen/models/students_and_faculty_sf_one_model.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
+import 'package:canteenpreorderapp/presentation/students_and_faculty_sf_one_screen/models/students_and_faculty_sf_one_model.dart';
 
 /// A controller class for the StudentsAndFacultySfOneScreen.
 ///

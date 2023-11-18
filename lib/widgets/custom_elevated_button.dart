@@ -1,5 +1,5 @@
-import 'package:canteenpreorder/core/app_export.dart';
-import 'package:canteenpreorder/widgets/base_button.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
+import 'package:canteenpreorderapp/widgets/base_button.dart';
 import 'package:flutter/material.dart';
 
 class CustomElevatedButton extends BaseButton {
@@ -46,10 +46,11 @@ class CustomElevatedButton extends BaseButton {
   }
 
   Widget get buildElevatedButtonWidget => Container(
-        height: this.height ?? 50.v,
+        height: this.height ?? 41.v,
         width: this.width ?? double.maxFinite,
         margin: margin,
-        decoration: decoration,
+        decoration: decoration ??
+            CustomButtonStyles.gradientPrimaryToErrorContainerDecoration,
         child: ElevatedButton(
           style: buttonStyle,
           onPressed: isDisabled ?? false ? null : onPressed ?? () {},
@@ -60,8 +61,7 @@ class CustomElevatedButton extends BaseButton {
               leftIcon ?? const SizedBox.shrink(),
               Text(
                 text,
-                style: buttonTextStyle ??
-                    CustomTextStyles.headlineSmallMochiyPopOne,
+                style: buttonTextStyle ?? theme.textTheme.titleLarge,
               ),
               rightIcon ?? const SizedBox.shrink(),
             ],

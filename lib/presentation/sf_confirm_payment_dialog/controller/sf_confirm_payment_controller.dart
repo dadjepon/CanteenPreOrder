@@ -1,5 +1,5 @@
-import 'package:canteenpreorder/core/app_export.dart';
-import 'package:canteenpreorder/presentation/sf_confirm_payment_dialog/models/sf_confirm_payment_model.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
+import 'package:canteenpreorderapp/presentation/sf_confirm_payment_dialog/models/sf_confirm_payment_model.dart';
 
 /// A controller class for the SfConfirmPaymentDialog.
 ///
@@ -8,4 +8,6 @@ import 'package:canteenpreorder/presentation/sf_confirm_payment_dialog/models/sf
 class SfConfirmPaymentController extends GetxController {
   Rx<SfConfirmPaymentModel> sfConfirmPaymentModelObj =
       SfConfirmPaymentModel().obs;
+
+  Rx<String> radioGroup = "".obs;
 }

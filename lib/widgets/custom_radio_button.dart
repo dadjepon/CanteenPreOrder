@@ -1,4 +1,4 @@
-import 'package:canteenpreorder/core/app_export.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
 import 'package:flutter/material.dart';
 
 class CustomRadioButton extends StatelessWidget {
@@ -100,8 +100,8 @@ class CustomRadioButton extends StatelessWidget {
         style: textStyle ?? theme.textTheme.bodyLarge,
       );
   Widget get radioButtonWidget => SizedBox(
-        height: iconSize,
-        width: iconSize,
+        height: iconSize ?? 41.h,
+        width: iconSize ?? 41.h,
         child: Radio<String>(
           visualDensity: VisualDensity(
             vertical: -4,

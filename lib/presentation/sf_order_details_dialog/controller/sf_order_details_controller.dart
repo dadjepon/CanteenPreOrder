@@ -1,5 +1,5 @@
-import 'package:canteenpreorder/core/app_export.dart';
-import 'package:canteenpreorder/presentation/sf_order_details_dialog/models/sf_order_details_model.dart';
+import 'package:canteenpreorderapp/core/app_export.dart';
+import 'package:canteenpreorderapp/presentation/sf_order_details_dialog/models/sf_order_details_model.dart';
 
 /// A controller class for the SfOrderDetailsDialog.
 ///
