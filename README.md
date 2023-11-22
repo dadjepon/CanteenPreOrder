@@ -1,5 +1,6 @@
 
-# Team FoodEase
+
+# canteenpreorder
 
  _CanteenPreorder: Streamlining Food Ordering at Canteens_
 
@@ -13,6 +14,7 @@ when food is ready, menu changes, and support for mobile money (MoMo) billing.
 
 ## TODO (Key, high level functionalities to be implemented)
 
+
 1. Establish a preordering system to expedite the meal ordering procedure at Ashesi campus 
 canteens.
 2. Ensure that clients have access to the most recent information about available selections by 
@@ -21,5 +23,12 @@ providing real-time changes to the menu.
 4. Constantly improve CanteenPreorder based on insightful input from stakeholders and 
 users.
 
-## CanteenPreorderApp
+
+### CanteenPreorderApp
 This is application to help Ashesi students and staff to order food for delivery.
+
+
+### System requirements
+
+Dart SDK Version 2.18.0 or greater.
+Flutter SDK Version 3.3.0 or greater.
