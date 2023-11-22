@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "136012598953",
+    "project_id": "canteenpreorder-e7ea8",
+    "storage_bucket": "canteenpreorder-e7ea8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:136012598953:android:cf7ea5b3d0014bb377a3b8",
+        "android_client_info": {
+          "package_name": "com.example.canteen_preorderapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAwULbIq-gsxQMWG7Do5XJacDQUOZpj8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
