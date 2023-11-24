@@ -9,19 +9,24 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red,
-      body: Center( // Center the content for larger screens
+      backgroundColor: Color.fromARGB(255, 105, 4, 4),
+      body: Center(
+        // Center the content for larger screens
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 800), // Limit the max width
+          constraints:
+              const BoxConstraints(maxWidth: 800), // Limit the max width
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 48.0), // Increase padding
+            padding: const EdgeInsets.symmetric(
+                horizontal: 48.0), // Increase padding
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Spacer(),
-                Image.asset('lib/Pictures/pizza.jpeg', height: 180), // Increased image size
+                Image.asset('images/pizza.jpeg',
+                    height: 180), // Increased image size
                 const SizedBox(height: 30),
-                Image.asset('lib/Pictures/pizza.jpeg', height: 180), // Increased image size
+                Image.asset('images/pizza.jpeg',
+                    height: 180), // Increased image size
                 const SizedBox(height: 30),
                 const Text(
                   'Order\nYour Meal!',
@@ -35,15 +40,17 @@ class SplashScreen extends StatelessWidget {
                 Spacer(),
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed('/home');
+                    Get.toNamed('/login');
                     // Implement your navigation or functionality
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black, 
+                    foregroundColor: Colors.black,
                     backgroundColor: Colors.yellow,
-                    padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20), // Adjusted padding
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 60, vertical: 20), // Adjusted padding
                   ),
-                  child: const Text('Get Started', style: TextStyle(fontSize: 20)), // Increased text size
+                  child: const Text('Get Started',
+                      style: TextStyle(fontSize: 20)), // Increased text size
                 ),
                 const Spacer(),
               ],

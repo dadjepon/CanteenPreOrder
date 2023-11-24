@@ -1,11 +1,12 @@
 // ignore_for_file: file_names, library_private_types_in_public_api, prefer_const_constructors_in_immutables, prefer_const_constructors, sized_box_for_whitespace, prefer_const_literals_to_create_immutables
 
+import 'package:canteen_preorderapp/models/database_service.dart';
+import 'package:canteen_preorderapp/models/food_item.dart';
 import 'package:flutter/material.dart';
-import 'auth_controller.dart';
+import '../models/auth_service/auth_controller.dart';
 import 'package:get/get.dart';
+
 final AuthController authController = Get.find<AuthController>();
-
-
 
 class FoodAppHome extends StatefulWidget {
   FoodAppHome({Key? key}) : super(key: key);
@@ -14,15 +15,18 @@ class FoodAppHome extends StatefulWidget {
   _FoodAppHomeState createState() => _FoodAppHomeState();
 }
 
-class _FoodAppHomeState extends State<FoodAppHome> with SingleTickerProviderStateMixin {
+class _FoodAppHomeState extends State<FoodAppHome>
+    with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   final List<String> _filterOptions = ['All', 'Akomfem', 'Big Ben', 'Munchies'];
   String _selectedFilter = 'All';
+  late final DatabaseService _dataService;
 
   @override
   void initState() {
-    super.initState();
+    _dataService = DatabaseService();
     _tabController = TabController(length: 4, vsync: this);
+    super.initState();
   }
 
   @override
@@ -52,54 +56,71 @@ class _FoodAppHomeState extends State<FoodAppHome> with SingleTickerProviderStat
   }
 
   Widget buildFoodGrid() {
-  return GridView.builder(
-    padding: const EdgeInsets.all(8),
-    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 3,
-      crossAxisSpacing: 8,
-      mainAxisSpacing: 8,
-      childAspectRatio: 1,
-    ),
-    itemCount: 10,
-    itemBuilder: (context, index) {
-      String foodName = 'Jambalaya $index'; // Example food name
-      return InkWell(
-        onTap: () => showFoodDescription(foodName),
-        child: Card(
-          color: Color(0xFF6B0808),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: Image.asset(
-                  'lib/Pictures/pizza2.png', // Replace with your actual image asset
-                  fit: BoxFit.cover,
+    return StreamBuilder(
+      stream: _dataService.allFoods(),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.active:
+            if (snapshot.hasData) {
+              final allFoods = snapshot.data as Iterable<FoodItem>;
+              return GridView.builder(
+                padding: const EdgeInsets.all(8),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 1,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  foodName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text('Ghc20/'),
-              ),
-              IconButton(
-                icon: const Icon(Icons.favorite_border),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
+                itemCount: allFoods.length,
+                itemBuilder: (context, index) {
+                  final foodItem = allFoods.elementAt(index);
+                  String foodName = foodItem.foodName; // Example food name
+                  return InkWell(
+                    onTap: () => showFoodDescription(foodName),
+                    child: Card(
+                      color: Color(0xFF6B0808),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child: Image(
+                              image: NetworkImage(foodItem.foodImage),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              foodName,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(foodItem.price),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.favorite_border),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            } else {
+              // showLoadingDialog(context: context, text: "Please wait");
+              return const CircularProgressIndicator();
+            }
+          default:
+            // showLoadingDialog(context: context, text: "Please wait");
+            return const CircularProgressIndicator();
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +130,7 @@ class _FoodAppHomeState extends State<FoodAppHome> with SingleTickerProviderStat
         backgroundColor: Color(0xFF6B0808), // AppBar's custom background color
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.amber[800],
+          indicatorColor: Color.fromARGB(255, 92, 55, 7),
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white54,
           tabs: [
@@ -145,7 +166,9 @@ class _FoodAppHomeState extends State<FoodAppHome> with SingleTickerProviderStat
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: ChoiceChip(
-                    labelStyle: _selectedFilter == filter ? TextStyle(color: Colors.white) : null,
+                    labelStyle: _selectedFilter == filter
+                        ? TextStyle(color: Colors.white)
+                        : null,
                     selectedColor: Colors.red,
                     backgroundColor: Colors.grey[300],
                     label: Text(filter),
@@ -153,7 +176,6 @@ class _FoodAppHomeState extends State<FoodAppHome> with SingleTickerProviderStat
                     onSelected: (bool selected) {
                       setState(() {
                         _selectedFilter = filter;
-                        // TODO: Update grid view based on the selected filter
                       });
                     },
                   ),
@@ -177,7 +199,3 @@ class _FoodAppHomeState extends State<FoodAppHome> with SingleTickerProviderStat
     );
   }
 }
-
-
-
-  
