@@ -2,22 +2,27 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<Map<String, dynamic>?> signIn({required String email, required String password}) async {
+  Future<Map<String, dynamic>?> signIn(
+      {required String email, required String password}) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       final user = _auth.currentUser;
+
       if (user != null) {
-        final userData = await firestore.collection('users').doc(user.uid).get();
+        final userData =
+            await firestore.collection('users').doc(user.uid).get();
+
         final data = userData.data() as Map<String, dynamic>;
+
         final role = data['role'] ?? 'normal';
         return {'user': user, 'role': role};
       }
-      return null;
     } catch (e) {
       print(e.toString());
       return null;
@@ -26,7 +31,8 @@ class AuthService {
 
   Future<Map<String, dynamic>?> signUp(String email, String password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
       final user = _auth.currentUser;
       if (user != null) {
         // You can add additional user data to the Firestore database if needed
@@ -34,7 +40,10 @@ class AuthService {
           'role': 'normal', // Set the default role or other user data
         });
 
-        return {'user': user, 'role': 'normal'}; // You can change the default role here
+        return {
+          'user': user,
+          'role': 'normal'
+        }; // You can change the default role here
       }
       return null;
     } catch (e) {
