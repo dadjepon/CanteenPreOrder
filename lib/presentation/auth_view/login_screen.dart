@@ -20,20 +20,22 @@ class LoginScreen extends StatelessWidget {
     final password = passwordController.text;
 
     try {
-      final result = await AuthService().signIn(email:email, password:password);
+      final result =
+          await AuthService().signIn(email: email, password: password);
 
       if (result != null) {
         final user = result['user'];
         final role = result['role'];
+        debugPrint(role);
 
         if (user != null && role != null) {
           await authController.fetchUserData(user.uid);
           if (role == 'admin') {
-            Get.offAllNamed('/admin'); // Admin route
+            Get.toNamed('/admin'); // Admin route
           } else if (role == 'staff') {
-            Get.offAllNamed('/staff'); // Staff route
+            Get.toNamed('/staff'); // Staff route
           } else {
-            Get.offAllNamed('/normal'); // Normal user route
+            Get.toNamed('/normal'); // Normal user route
           }
         }
       } else {
@@ -172,11 +174,7 @@ class LoginScreen extends StatelessWidget {
                               );
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackbar);
-                              await AuthService().signIn(
-                                email: email,
-                                password: password,
-                              );
-                              Get.toNamed('/normal');
+                              login();
                             } on UserNotFoundAuthException {
                               await showErrorDialog(
                                 context,
