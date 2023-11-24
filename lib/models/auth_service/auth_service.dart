@@ -7,7 +7,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<Map<String, dynamic>?> signIn(String email, String password) async {
+  Future<Map<String, dynamic>?> signIn({required String email, required String password}) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       final user = _auth.currentUser;
