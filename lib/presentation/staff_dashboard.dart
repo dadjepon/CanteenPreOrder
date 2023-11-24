@@ -3,7 +3,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'auth_controller.dart';
+import '../models/auth_service/auth_controller.dart';
 import 'package:get/get.dart';
 
 class StaffDashboardScreen extends StatelessWidget {
