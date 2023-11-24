@@ -20,7 +20,7 @@ class LoginScreen extends StatelessWidget {
     final password = passwordController.text;
 
     try {
-      final result = await AuthService().signIn(email, password);
+      final result = await AuthService().signIn(email:email, password:password);
 
       if (result != null) {
         final user = result['user'];
@@ -172,7 +172,7 @@ class LoginScreen extends StatelessWidget {
                               );
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackbar);
-                              await FirebaseAuthService().logIn(
+                              await AuthService().signIn(
                                 email: email,
                                 password: password,
                               );
