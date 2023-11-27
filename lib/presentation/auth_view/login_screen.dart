@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 import 'package:canteen_preorderapp/models/auth_service/auth_exceptions.dart';
-import 'package:canteen_preorderapp/models/auth_service/firebase_service.dart';
 import 'package:canteen_preorderapp/widgets/custom_dialogs/show_error_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
