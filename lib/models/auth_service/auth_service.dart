@@ -2,7 +2,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,6 +26,7 @@ class AuthService {
       print(e.toString());
       return null;
     }
+    return null;
   }
 
   Future<Map<String, dynamic>?> signUp(String email, String password) async {
