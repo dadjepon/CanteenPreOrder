@@ -4,3 +4,6 @@ const String foodImageField = "foodImage";
 const String foodNameField = "foodName";
 const String foodDescriptionField = "foodDescription";
 const String priceField = "price";
+
+const String customerEmailField = "email";
+const String customerNameField = "name";

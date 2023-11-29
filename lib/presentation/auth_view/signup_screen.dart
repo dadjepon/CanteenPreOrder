@@ -48,7 +48,7 @@ class SignupScreen extends StatelessWidget {
           Get.snackbar(
             'Registration Failed',
             'Please check your information and try again.',
-            backgroundColor: Colors.red,
+            backgroundColor: Color(0xFF6B0808),
           );
         }
       } else {
@@ -56,7 +56,7 @@ class SignupScreen extends StatelessWidget {
         Get.snackbar(
           'Error',
           'Passwords do not match.',
-          backgroundColor: Colors.red,
+          backgroundColor: Color(0xFF6B0808),
         );
       }
     }
@@ -83,8 +83,8 @@ class SignupScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 105, 4, 4),
         body: Center(
-          child: Form(
-            key: formKey,
+            child: Form(
+          key: formKey,
           child: Card(
             shadowColor: Colors.white,
             // margin: const EdgeInsets.only(top: 5.0),

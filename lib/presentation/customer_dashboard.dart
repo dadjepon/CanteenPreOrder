@@ -3,6 +3,7 @@
 import 'package:canteen_preorderapp/core/utils/size_utils.dart';
 import 'package:canteen_preorderapp/models/database_service.dart';
 import 'package:canteen_preorderapp/models/food_item.dart';
+import 'package:canteen_preorderapp/presentation/profile_screen.dart';
 import 'package:canteen_preorderapp/theme/app_decoration.dart';
 import 'package:canteen_preorderapp/theme/custom_text_style.dart';
 import 'package:canteen_preorderapp/theme/theme_helper.dart';
@@ -24,7 +25,12 @@ class FoodAppHome extends StatefulWidget {
 class _FoodAppHomeState extends State<FoodAppHome>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
-  final List<String> _filterOptions = ['All', 'Akomfem', 'Big Ben', 'Munchies'];
+  final List<String> _filterOptions = [
+    'All',
+    'Filter 1',
+    'Filter 2',
+    'Filter 3'
+  ];
   String _selectedFilter = 'All';
   late final DatabaseService _dataService;
 
@@ -239,9 +245,10 @@ class _FoodAppHomeState extends State<FoodAppHome>
               controller: _tabController,
               children: [
                 buildFoodGrid(),
-                const Text('Cafeteria Tab'),
+                const Text(
+                    'Cafeteria Tab - Drop down where you can select all a specific cafeteria or all menus grouped into heading of the cafeteria name'),
                 const Text('Cart Tab'),
-                const Text('Profile Tab'),
+                SfProfileScreen(),
               ],
             ),
           ),
