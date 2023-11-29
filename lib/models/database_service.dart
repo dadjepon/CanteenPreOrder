@@ -25,6 +25,23 @@ class DatabaseService {
     }).first;
   }
 
+  Future<void> addFoodItem(
+      {required String foodName,
+      required String foodDescription,
+      required String foodImage,
+      required String cafeteria,
+      required String price,
+      required String timestamp}) async {
+    await menu.add({
+      'cafeteria': cafeteria,
+      'foodDescription': foodDescription,
+      'price': price,
+      'foodName': foodName,
+      'foodImage': foodImage,
+      'timestamp': timestamp,
+    });
+  }
+
   //creating a singleton to mantains the same instance across the application
   static final DatabaseService _shared = DatabaseService._sharedInstance();
   DatabaseService._sharedInstance();
