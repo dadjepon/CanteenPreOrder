@@ -15,6 +15,7 @@ class SignupScreen extends StatelessWidget {
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
   final TextEditingController confirmPasswordController =
@@ -27,6 +28,7 @@ class SignupScreen extends StatelessWidget {
     if (formKey.currentState!.validate()) {
       final name = nameController.text;
       final email = emailController.text;
+      final phoneNumber = phoneNumberController.text;
       const role = 'normal';
       final password = passwordController.text;
       final confirmPassword = confirmPasswordController.text;
@@ -37,7 +39,7 @@ class SignupScreen extends StatelessWidget {
         if (result != null) {
           // Registration was successful
           // Save user information to Firestore
-          await saveUserInfoToFirestore(name, email, role);
+          await saveUserInfoToFirestore(name, email, phoneNumber, role);
 
           // You can navigate to the next screen or perform any other actions
           // For example, navigate to the dashboard
@@ -63,14 +65,16 @@ class SignupScreen extends StatelessWidget {
   }
 
   Future<void> saveUserInfoToFirestore(
-      String name, String email, String role) async {
+      String name, String email, String phoneNumber, String role) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        await firestore
-            .collection('users')
-            .doc(user.uid)
-            .set({'name': name, 'email': email, 'role': role});
+        await firestore.collection('users').doc(user.uid).set({
+          'name': name,
+          'email': email,
+          'phoneNumber': phoneNumber,
+          'role': role
+        });
       }
     } catch (e) {
       // ignore: avoid_print
@@ -134,6 +138,11 @@ class SignupScreen extends StatelessWidget {
                       labelText: "Email Address",
                       fieldController: emailController,
                       keyboardType: TextInputType.emailAddress,
+                    ),
+                    CustomTextField(
+                      labelText: "Phone Number ",
+                      fieldController: phoneNumberController,
+                      keyboardType: TextInputType.number,
                     ),
 
                     //password input field
