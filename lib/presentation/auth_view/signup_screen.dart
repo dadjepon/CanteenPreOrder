@@ -236,7 +236,7 @@ class SignupScreen extends StatelessWidget {
                             if (email.isEmpty ||
                                 password.isEmpty ||
                                 dob.isEmpty ||
-                                password.isEmpty ||
+                                confirmPass.isEmpty ||
                                 fullName.isEmpty) {
                               await showErrorDialog(
                                 context,
@@ -252,6 +252,11 @@ class SignupScreen extends StatelessWidget {
                               await showErrorDialog(
                                 context,
                                 "Name is too long, try initials",
+                              );
+                            } else if (confirmPass != password) {
+                              await showErrorDialog(
+                                context,
+                                "Passwords do not match",
                               );
                             } else {
                               try {
