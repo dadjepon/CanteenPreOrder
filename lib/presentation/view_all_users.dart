@@ -1,24 +1,25 @@
 // ignore_for_file: file_names, library_private_types_in_public_api
 
+import 'package:canteen_preorderapp/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
-  final String name;
-  final String email;
-  final String role;
+// class User {
+//   final String name;
+//   final String email;
+//   final String role;
 
-  User({required this.name, required this.email, required this.role});
+//   User({required this.name, required this.email, required this.role});
 
-  factory User.fromFirestore(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>? ?? {};
-    return User(
-      name: data['name'] ?? 'No Name',
-      email: data['email'] ?? 'No Email',
-      role: data['role'] ?? 'No Role',
-    );
-  }
-}
+//   factory User.fromFirestore(DocumentSnapshot doc) {
+//     Map<String, dynamic> data = doc.data() as Map<String, dynamic>? ?? {};
+//     return User(
+//       name: data['name'] ?? 'No Name',
+//       email: data['email'] ?? 'No Email',
+//       role: data['role'] ?? 'No Role',
+//     );
+//   }
+// }
 
 class UserListScreen extends StatefulWidget {
   const UserListScreen({super.key});
@@ -40,9 +41,13 @@ class _UserListScreenState extends State<UserListScreen> {
   }
 
   void _loadUsers() async {
-    FirebaseFirestore.instance.collection('users').get().then((QuerySnapshot querySnapshot) {
+    FirebaseFirestore.instance
+        .collection('userCollection')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
       setState(() {
-        users = querySnapshot.docs.map((doc) => User.fromFirestore(doc)).toList();
+        users =
+            querySnapshot.docs.map((doc) => User.fromFirestore(doc)).toList();
         filteredUsers = List.from(users); // Initially, all users are shown
       });
     });
@@ -87,7 +92,8 @@ class _UserListScreenState extends State<UserListScreen> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(filteredUsers[index].name),
-                  subtitle: Text('Email: ${filteredUsers[index].email}, Role: ${filteredUsers[index].role}'),
+                  subtitle: Text(
+                      'Email: ${filteredUsers[index].email}, Role: ${filteredUsers[index].role}'),
                 );
               },
             ),
@@ -97,6 +103,3 @@ class _UserListScreenState extends State<UserListScreen> {
     );
   }
 }
-
-
-
