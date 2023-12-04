@@ -1,8 +1,5 @@
 export 'package:canteen_preorderapp/core/utils/size_utils.dart';
 export 'package:canteen_preorderapp/widgets/custom_image_view.dart';
-export 'package:canteen_preorderapp/core/utils/size_utils.dart';
-export 'package:canteen_preorderapp/theme/theme_helper.dart';
-export 'package:canteen_preorderapp/core/utils/size_utils.dart';
 export 'package:canteen_preorderapp/theme/theme_helper.dart';
 export 'package:canteen_preorderapp/theme/custom_text_style.dart';
 export 'package:canteen_preorderapp/core/utils/image_constant.dart';
