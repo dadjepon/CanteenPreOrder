@@ -2,6 +2,7 @@ import 'package:canteen_preorderapp/core/app_export.dart';
 import 'package:canteen_preorderapp/models/auth_service/firebase_service.dart';
 import 'package:canteen_preorderapp/models/cart_item.dart';
 import 'package:canteen_preorderapp/models/database_service.dart';
+import 'package:canteen_preorderapp/presentation/payment_view/payment_page.dart';
 import 'package:canteen_preorderapp/widgets/cart_button.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -39,10 +40,23 @@ class _CartViewState extends State<CartView> {
           style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll<Color>(
                   Color.fromARGB(255, 105, 4, 4))),
-          onPressed: () {
+          onPressed: () async {
             setState(() {
               getTotalPrice(userId: FirebaseAuthService().currentUser!.id);
             });
+            int timestamp = DateTime.now().millisecondsSinceEpoch;
+            String id = FirebaseAuthService().currentUser!.id;
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PaymentPage(
+                  amount: "$amount",
+                  email: FirebaseAuthService().currentUser!.email,
+                  reference: "${timestamp}_${id}",
+                ),
+              ),
+            );
           },
           child: Text(
             "Make Payment ${amount}",

@@ -2,29 +2,49 @@ import 'package:canteen_preorderapp/models/auth_service/auth_exceptions.dart';
 import 'package:canteen_preorderapp/widgets/custom_dialogs/show_error_dialog.dart';
 import 'package:canteen_preorderapp/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'package:google_fonts/google_fonts.dart';
 import '../../models/auth_service/auth_service.dart';
+import 'package:canteen_preorderapp/models/database_service.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
 
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  late final DatabaseService _dataService;
+
+  @override
+  void initState() {
+    _dataService = DatabaseService();
+    super.initState();
+  }
+
   final TextEditingController nameController = TextEditingController();
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController instIDController = TextEditingController();
+
   final TextEditingController phoneNumberController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   final TextEditingController dobController = TextEditingController();
+
   final TextEditingController confirmPasswordController =
       TextEditingController();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final FirebaseFirestore firestore =
-      FirebaseFirestore.instance; // Firestore instance
 
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // Firestore instance
   void signUp() async {
     if (formKey.currentState!.validate()) {
       final name = nameController.text;
@@ -41,7 +61,9 @@ class SignupScreen extends StatelessWidget {
         if (result != null) {
           // Registration was successful
           // Save user information to Firestore
-          await saveUserInfoToFirestore(name, email, instID, phoneNumber, role);
+          final user = FirebaseAuth.instance.currentUser;
+          await _dataService.saveUserInfoToFirestore(
+              name, email, instID, phoneNumber, role, user);
 
           // You can navigate to the next screen or perform any other actions
           // For example, navigate to the dashboard
@@ -63,26 +85,6 @@ class SignupScreen extends StatelessWidget {
           backgroundColor: Color(0xFF6B0808),
         );
       }
-    }
-  }
-
-// TO DO: Send this to the model section later
-  Future<void> saveUserInfoToFirestore(String name, String email, String instID,
-      String phoneNumber, String role) async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await firestore.collection('userCollection').doc(user.uid).set({
-          'name': name,
-          'email': email,
-          'phoneNumber': phoneNumber,
-          'instID': instID,
-          'role': role
-        });
-      }
-    } catch (e) {
-      // ignore: avoid_print
-      print('Error saving user information to Firestore: $e');
     }
   }
 
@@ -212,14 +214,10 @@ class SignupScreen extends StatelessWidget {
                                 r'^\w+([.-]?\w+)*@(ashesi\.edu\.gh|gmail\.com|aucampus\.onmicrosoft\.com)$');
 
                             if (email.isEmpty ||
-
-                                dob.isEmpty ||
                                 confirmPass.isEmpty ||
-
                                 instID.isEmpty ||
                                 phoneNumber.isEmpty ||
                                 password.isEmpty ||
-
                                 fullName.isEmpty) {
                               await showErrorDialog(
                                 context,
