@@ -13,6 +13,8 @@ class DatabaseService {
   final foodCollection =
       FirebaseFirestore.instance.collection('foodCollection');
   final users = FirebaseFirestore.instance.collection('users');
+  final usersCollection =
+      FirebaseFirestore.instance.collection('usersCollection');
 
   Stream<Iterable<MenuItem>> allFoods() => menuCollection
       .snapshots()
@@ -48,7 +50,7 @@ class DatabaseService {
   }
 
   Future<CustomerItem> getUser({required String userId}) async {
-    return users
+    return usersCollection
         .where(FieldPath.documentId, isEqualTo: userId)
         .snapshots()
         .map((querySnapshot) {
@@ -176,6 +178,25 @@ class DatabaseService {
       'foodImage': foodImage,
       'timestamp': timestamp,
     });
+  }
+
+  // TO DO: Send this to the model section later
+  Future<void> saveUserInfoToFirestore(String name, String email, String instID,
+      String phoneNumber, String role, user) async {
+    try {
+      if (user != null) {
+        await usersCollection.doc(user.uid).set({
+          'name': name,
+          'email': email,
+          'phoneNumber': phoneNumber,
+          'instID': instID,
+          'role': role
+        });
+      }
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error saving user information to Firestore: $e');
+    }
   }
 
   //creating a singleton to mantains the same instance across the application
