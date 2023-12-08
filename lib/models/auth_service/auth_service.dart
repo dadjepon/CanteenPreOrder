@@ -15,7 +15,7 @@ class AuthService {
 
       if (user != null) {
         final userData =
-            await firestore.collection('users').doc(user.uid).get();
+            await firestore.collection('usersCollection').doc(user.uid).get();
 
         final data = userData.data() as Map<String, dynamic>;
 
@@ -36,7 +36,7 @@ class AuthService {
       final user = _auth.currentUser;
       if (user != null) {
         // You can add additional user data to the Firestore database if needed
-        await firestore.collection('users').doc(user.uid).set({
+        await firestore.collection('usersCollection').doc(user.uid).set({
           'role': 'normal', // Set the default role or other user data
         });
 

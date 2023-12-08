@@ -17,3 +17,6 @@ class GenericAuthException implements Exception {}
 class UserNotLoggedInAuthException implements Exception {}
 
 class CantSentEmailAuthException implements Exception {}
+
+class CouldNotFindFoodException
+    implements Exception {} //TODO: Take it to where it belongs
