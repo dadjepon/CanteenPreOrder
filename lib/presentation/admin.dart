@@ -46,70 +46,61 @@ class AdminDashboardScreen extends GetView<AuthController> {
                   ),
                 ),
                 // Add sidebar items here
-                // ElevatedButton(
-                //   style:
-                //       ElevatedButton.styleFrom(fixedSize: const Size(200, 60)),
-                //   onPressed: () => _showCreateUserDialog(context),
-                //   child: const Text('Create New User'),
-                // ),
-                // const SizedBox(height: 10),
-                // ElevatedButton(
-                //   style:
-                //       ElevatedButton.styleFrom(fixedSize: const Size(200, 60)),
-                //   onPressed: () => _showDeleteUserDialog(context),
-                //   child: const Text('Delete User'),
-                // ),
-                // const SizedBox(height: 10),
-                // ElevatedButton(
-                //   style:
-                //       ElevatedButton.styleFrom(fixedSize: const Size(200, 60)),
-                //   onPressed: () {
-                //     Get.to(() =>
-                //         const UserListScreen()); // Navigate to UserListScreen
-                //   },
-                //   child: const Text('View All Users'),
-                // ),
-                // // Add more sidebar items as needed
               ],
             ),
           ),
           // Main content
           Expanded(
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(200, 60)),
-                    onPressed: () => _showCreateUserDialog(context),
-                    child: const Text('Create New User'),
+            child: Column(children: [
+              // Search bar
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    border: OutlineInputBorder(),
                   ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(200, 60)),
-                    onPressed: () => _showDeleteUserDialog(context),
-                    child: const Text('Delete User'),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(200, 60)),
-                    onPressed: () {
-                      Get.to(() =>
-                          const UserListScreen()); // Navigate to UserListScreen
-                    },
-                    child: const Text('View All Users'),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
+
+              Center(
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  // children: [
+                  //   ElevatedButton(
+                  //     style: ElevatedButton.styleFrom(
+                  //         fixedSize: const Size(200, 60)),
+                  //     onPressed: () => _showCreateUserDialog(context),
+                  //     child: const Text('Create New User'),
+                  //   ),
+                  //   const SizedBox(height: 10),
+                  //   ElevatedButton(
+                  //     style: ElevatedButton.styleFrom(
+                  //         fixedSize: const Size(200, 60)),
+                  //     onPressed: () => _showDeleteUserDialog(context),
+                  //     child: const Text('Delete User'),
+                  //   ),
+                  //   const SizedBox(height: 10),
+                  //   ElevatedButton(
+                  //     style: ElevatedButton.styleFrom(
+                  //         fixedSize: const Size(200, 60)),
+                  //     onPressed: () {
+                      
+                            widget(child: UserListScreen())); // Navigate to UserListScreen
+              //         },
+              //         child: const Text('View All Users'),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+            ]),
+          )
         ],
       ),
     );
   }
+  
+  widget({required UserListScreen child}) {}
 }
 
 void _showCreateUserDialog(BuildContext context) {
