@@ -1,5 +1,7 @@
 import 'package:canteen_preorderapp/core/app_export.dart';
+import 'package:canteen_preorderapp/presentation/current_orders.dart';
 import 'package:canteen_preorderapp/presentation/view_all_users.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:sizer/sizer.dart';
 
@@ -11,6 +13,7 @@ void main() async {
   );
 
   runApp(MyApp());
+  // runApp(MyHomePage());
 }
 
 class MyApp extends StatelessWidget {
@@ -38,7 +41,9 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/staff', page: () => StaffDashboardScreen()),
           GetPage(name: '/viewAllUsers', page: () => const UserListScreen()),
           GetPage(name: '/menu_update', page: () => UploadImageScreen()),
-// Add GetPage entries for other new screens as well
+          GetPage(name: '/trackOrder', page: () => CurrentOrdersScreen()),
+          // Add GetPage entries for other new screens as well
+
 
           // Signup screen route
         ],
