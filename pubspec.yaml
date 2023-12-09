@@ -54,7 +54,6 @@ dependencies:
   webview_flutter_web: ^0.2.2+3
   webview_flutter_platform_interface: ^2.8.0
   order_tracker: ^0.0.2
-  sizer: ^2.0.15
   badges: ^3.1.2
   timelines: ^0.1.0
   font_awesome_flutter: ^10.6.0
