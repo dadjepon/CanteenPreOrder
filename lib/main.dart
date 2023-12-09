@@ -3,6 +3,8 @@ import 'package:canteen_preorderapp/presentation/current_orders.dart';
 import 'package:canteen_preorderapp/presentation/view_all_users.dart';
 import 'package:sizer/sizer.dart';
 
+import 'package:sizer/sizer.dart';
+
 void main() async {
   await GetStorage.init(); // Initialize GetStorage
 
@@ -21,7 +23,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (context, orientation, deviceType) {
+    return Sizer(builder: (
+      context,
+      orientation,
+      deviceType,
+    ) {
       return GetMaterialApp(
         title: 'Home page',
         initialRoute: '/', // Set the initial route
@@ -37,6 +43,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/menu_update', page: () => UploadImageScreen()),
           GetPage(name: '/trackOrder', page: () => CurrentOrdersScreen()),
           // Add GetPage entries for other new screens as well
+
 
           // Signup screen route
         ],
