@@ -15,33 +15,43 @@ class AdminDashboardScreen extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Dashboard'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () => _showCreateUserDialog(context),
-              child: const Text('Create New User'),
+
+      backgroundColor: Color.fromARGB(255, 244, 229, 229),
+      body: Row(
+        children: [
+          // Sidebar
+          Container(
+            width: 350,
+            color: Color.fromARGB(
+                255, 217, 64, 64), // You can set your desired sidebar color
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Sidebar Title
+                Text(
+                  'Admin Dashboard',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                // Add sidebar items here
+              ],
             ),
-            ElevatedButton(
-              onPressed: () => _showDeleteUserDialog(context),
-              child: const Text('Delete User'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Get.to(
-                    () => const UserListScreen()); // Navigate to UserListScreen
-              },
-              child: const Text('View All Users'),
-            ),
-          ],
-        ),
+          ),
+          // Main content
+          Expanded(
+            child: UserListScreen(),
+          ),
+        ],
       ),
     );
   }
+}
+
+
 
   void _showCreateUserDialog(BuildContext context) {
     showDialog(
