@@ -4,12 +4,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:html' as html;
 
-class UploadImageScreen extends StatefulWidget {
+class AddFoodItemScreen extends StatefulWidget {
   @override
-  _UploadImageScreenState createState() => _UploadImageScreenState();
+  _AddFoodItemScreenState createState() => _AddFoodItemScreenState();
 }
 
-class _UploadImageScreenState extends State<UploadImageScreen> {
+class _AddFoodItemScreenState extends State<AddFoodItemScreen> {
   String? _uploadedFileURL;
   html.File? _imageFile;
   String? _confirmationMessage;
@@ -17,6 +17,8 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
   final _foodDescriptionController = TextEditingController();
   final _priceController = TextEditingController();
   final _foodNameController = TextEditingController();
+  final _statusController = TextEditingController();
+  final _menuTypeController = TextEditingController();
   final _formKey = GlobalKey<FormState>(); // Form key for validation
   late final DatabaseService _dataService;
 
@@ -52,6 +54,8 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
           foodDescription: _foodDescriptionController.text,
           foodImage: _uploadedFileURL!,
           price: _priceController.text,
+          availabilityStatus: _statusController.text,
+          menuType: _menuTypeController.text,
           timestamp: FieldValue.serverTimestamp().toString(),
           cafeteria: _cafeteriaController.text);
       // Handle post submission logic (e.g., show a success message, clear the form, etc.)
@@ -107,60 +111,170 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Upload Menu Item')),
+      appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: Text('Upload Menu Item'),
+          backgroundColor: const Color(0xFF6B0808)),
       body: Center(
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Row(
+              // Replace the existing Column widget with a Row widget
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                TextFormField(
-                  controller: _cafeteriaController,
-                  decoration: InputDecoration(labelText: 'Cafeteria Name'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter cafeteria name' : null,
-                ),
-                TextFormField(
-                  controller: _foodDescriptionController,
-                  decoration: InputDecoration(labelText: 'Food Description'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter a description' : null,
-                ),
-                TextFormField(
-                  controller: _foodNameController,
-                  decoration: InputDecoration(labelText: 'Food Name'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter a Name' : null,
-                ),
-                TextFormField(
-                  controller: _priceController,
-                  decoration: InputDecoration(labelText: 'Price'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter a price' : null,
-                ),
-                SizedBox(height: 20),
-                _uploadedFileURL != null
-                    ? Image.network(_uploadedFileURL!)
-                    : Text('No image selected.'),
-                ElevatedButton(
-                  onPressed: _pickAndUploadImage,
-                  child: Text('Upload Image'),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: Text('Submit Menu Item'),
-                ),
-                if (_confirmationMessage != null)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      _confirmationMessage!,
-                      style: TextStyle(color: Colors.green),
+                // Left column for image upload
+                Column(
+                  children: [
+                    Container(
+                      width: 200,
+                      height: 200,
+                      child: _uploadedFileURL != null
+                          ? Image.network(_uploadedFileURL!)
+                          : Text('No image selected.'),
                     ),
-                  ),
+                    Container(
+                      width: 200,
+                      child: ElevatedButton(
+                        onPressed: _pickAndUploadImage,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.upload_file),
+                            SizedBox(width: 10),
+                            Text('Upload Image'),
+                          ],
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                        ),
+                      ),
+                    ),
+                    if (_confirmationMessage != null)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _confirmationMessage!,
+                          style: TextStyle(color: Colors.green),
+                        ),
+                      ),
+                  ],
+                ),
+
+                // Right column for form
+                Column(
+                  children: <Widget>[
+                    // Field name
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child:
+                          Text('Menu Update', style: TextStyle(fontSize: 20)),
+                    ),
+
+                    // Field input box
+                    Container(
+                      width: 200,
+                      child: TextFormField(
+                        controller: _cafeteriaController,
+                        decoration:
+                            InputDecoration(labelText: 'Cafeteria Name'),
+                        validator: (value) => value!.isEmpty
+                            ? 'Please enter cafeteria name'
+                            : null,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+
+                    Container(
+                      width: 200,
+                      child: TextFormField(
+                        controller: _statusController,
+                        decoration:
+                            InputDecoration(labelText: 'Availabity Status'),
+                        validator: (value) => value!.isEmpty
+                            ? 'Please enter food availability'
+                            : null,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+
+                    Container(
+                      width: 200,
+                      child: TextFormField(
+                        controller: _foodNameController,
+                        decoration: InputDecoration(labelText: 'Food Name'),
+                        validator: (value) =>
+                            value!.isEmpty ? 'Please enter food name' : null,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+
+                    Container(
+                      width: 200,
+                      child: TextFormField(
+                        controller: _foodDescriptionController,
+                        decoration:
+                            InputDecoration(labelText: 'Food Description'),
+                        validator: (value) => value!.isEmpty
+                            ? 'Please enter food description'
+                            : null,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+
+                    Container(
+                      width: 200,
+                      child: TextFormField(
+                        controller: _menuTypeController,
+                        decoration: InputDecoration(labelText: 'Menu Type'),
+                        validator: (value) => value!.isEmpty
+                            ? 'Please enter the menu type'
+                            : null,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+
+                    Container(
+                      width: 200,
+                      child: TextFormField(
+                        controller: _priceController,
+                        decoration: InputDecoration(labelText: 'Price'),
+                        validator: (value) =>
+                            value!.isEmpty ? 'Please enter the price' : null,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ), // Add more fields as needed...
+
+                    SizedBox(height: 20),
+
+                    // Submit button
+                    ElevatedButton(
+                      onPressed: _submitForm,
+                      child: Text('Submit Menu Item'),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
