@@ -3,8 +3,6 @@ import 'package:canteen_preorderapp/presentation/current_orders.dart';
 import 'package:canteen_preorderapp/presentation/view_all_users.dart';
 import 'package:sizer/sizer.dart';
 
-import 'package:sizer/sizer.dart';
-
 void main() async {
   await GetStorage.init(); // Initialize GetStorage
 
@@ -40,12 +38,8 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/admin', page: () => const AdminDashboardScreen()),
           GetPage(name: '/staff', page: () => StaffDashboardScreen()),
           GetPage(name: '/viewAllUsers', page: () => const UserListScreen()),
-          GetPage(name: '/menu_update', page: () => UploadImageScreen()),
+          GetPage(name: '/menu_update', page: () => AddFoodItemScreen()),
           GetPage(name: '/trackOrder', page: () => CurrentOrdersScreen()),
-          // Add GetPage entries for other new screens as well
-
-
-          // Signup screen route
         ],
       );
     });

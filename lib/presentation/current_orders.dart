@@ -2,7 +2,7 @@ import 'package:canteen_preorderapp/core/app_export.dart';
 import 'package:canteen_preorderapp/models/auth_service/firebase_service.dart';
 import 'package:canteen_preorderapp/models/database_service.dart';
 import 'package:canteen_preorderapp/models/order_item.dart';
-import 'package:canteen_preorderapp/widgets/order_tracking.dart';
+import 'package:canteen_preorderapp/widgets/designs/order_tracking.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
