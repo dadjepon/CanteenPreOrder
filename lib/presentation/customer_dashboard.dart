@@ -2,9 +2,11 @@
 
 import 'package:canteen_preorderapp/core/utils/size_utils.dart';
 import 'package:canteen_preorderapp/models/auth_service/firebase_service.dart';
+import 'package:canteen_preorderapp/models/cart_item.dart';
 import 'package:canteen_preorderapp/models/database_service.dart';
 import 'package:canteen_preorderapp/models/menu_item.dart';
 import 'package:canteen_preorderapp/presentation/cart_view/cart_view.dart';
+import 'package:canteen_preorderapp/presentation/current_orders.dart';
 import 'package:canteen_preorderapp/presentation/profile_screen.dart';
 import 'package:canteen_preorderapp/theme/app_decoration.dart';
 import 'package:canteen_preorderapp/theme/custom_text_style.dart';
@@ -15,6 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/auth_service/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:badges/badges.dart' as badges;
 
 final AuthController authController = Get.find<AuthController>();
 
@@ -40,7 +43,7 @@ class _FoodAppHomeState extends State<FoodAppHome>
   @override
   void initState() {
     _dataService = DatabaseService();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     super.initState();
   }
 
@@ -58,6 +61,7 @@ class _FoodAppHomeState extends State<FoodAppHome>
           case ConnectionState.active:
             if (snapshot.hasData) {
               final allFoods = snapshot.data as Iterable<MenuItem>;
+
               return Expanded(
                   child: StaggeredGridView.countBuilder(
                       shrinkWrap: true,
@@ -161,7 +165,7 @@ class _FoodAppHomeState extends State<FoodAppHome>
                                     Padding(
                                       padding: EdgeInsets.only(left: 50.h),
                                       child: ElevatedButton(
-                                        onPressed: () {
+                                        onPressed: () async {
                                           if (menuItem.availabilityStatus ==
                                               "Yes") {
                                             _dataService.addToCart(
@@ -169,6 +173,16 @@ class _FoodAppHomeState extends State<FoodAppHome>
                                                     .currentUser!
                                                     .id,
                                                 menuItem.menuItemId);
+
+                                            _dataService
+                                                .allCartItems(
+                                                    userId:
+                                                        FirebaseAuthService()
+                                                            .currentUser!
+                                                            .id)
+                                                .length
+                                                .then(
+                                                    (value) => print("value"));
 
                                             final snackbar = SnackBar(
                                               // duration: const Duration(seconds: 5),
@@ -239,8 +253,35 @@ class _FoodAppHomeState extends State<FoodAppHome>
           tabs: [
             Tab(icon: Icon(Icons.home), text: 'Home'),
             Tab(icon: Icon(Icons.store), text: 'Cafeteria'),
-            Tab(icon: Icon(Icons.shopping_cart), text: 'Cart'),
+            Tab(
+              child: StreamBuilder(
+                stream: _dataService.allCartItems(
+                  userId: FirebaseAuthService().currentUser!.id,
+                ),
+                builder: (context, snapshot) {
+                  var cartItemsLength = 0;
+                  if (snapshot.hasData) {
+                    final items = snapshot.data as Iterable<CartItem>;
+                    for (int i = 0; i < items.length; i++) {
+                      cartItemsLength += items.elementAt(i).quantity;
+                    }
+                  }
+
+                  return badges.Badge(
+                    badgeStyle: badges.BadgeStyle(badgeColor: Colors.white),
+                    badgeContent: Text(
+                      '$cartItemsLength',
+                      style: TextStyle(color: Color.fromARGB(255, 230, 9, 9)),
+                    ),
+                    child: Icon(
+                      Icons.shopping_cart,
+                    ),
+                  );
+                },
+              ),
+            ),
             Tab(icon: Icon(Icons.person), text: 'Profile'),
+            Tab(icon: Icon(Icons.food_bank_outlined), text: 'Orders'),
           ],
         ),
       ),
@@ -250,15 +291,14 @@ class _FoodAppHomeState extends State<FoodAppHome>
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                hintText: 'Search',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
+                  prefixIcon: Icon(Icons.search),
+                  hintText: 'Search',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[300]),
             ),
           ),
           Container(
@@ -295,6 +335,7 @@ class _FoodAppHomeState extends State<FoodAppHome>
                     'Cafeteria Tab - Drop down where you can select all a specific cafeteria or all menus grouped into heading of the cafeteria name'),
                 CartView(),
                 SfProfileScreen(),
+                CurrentOrdersScreen(),
               ],
             ),
           ),
