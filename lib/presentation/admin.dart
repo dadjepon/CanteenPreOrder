@@ -16,14 +16,6 @@ class AdminDashboardScreen extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Color.fromARGB(255, 217, 64, 64),
-      //   title: const Text(
-      //     'Admin Dashboard',
-      //     style: TextStyle(color: Colors.white),
-      //   ),
-      // ),
-      // backgroundColor: Color.fromARGB(255, 243, 84, 84),
       backgroundColor: Color.fromARGB(255, 244, 229, 229),
       body: Row(
         children: [
@@ -51,56 +43,12 @@ class AdminDashboardScreen extends GetView<AuthController> {
           ),
           // Main content
           Expanded(
-            child: Column(children: [
-              // Search bar
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-
-              Center(
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  // children: [
-                  //   ElevatedButton(
-                  //     style: ElevatedButton.styleFrom(
-                  //         fixedSize: const Size(200, 60)),
-                  //     onPressed: () => _showCreateUserDialog(context),
-                  //     child: const Text('Create New User'),
-                  //   ),
-                  //   const SizedBox(height: 10),
-                  //   ElevatedButton(
-                  //     style: ElevatedButton.styleFrom(
-                  //         fixedSize: const Size(200, 60)),
-                  //     onPressed: () => _showDeleteUserDialog(context),
-                  //     child: const Text('Delete User'),
-                  //   ),
-                  //   const SizedBox(height: 10),
-                  //   ElevatedButton(
-                  //     style: ElevatedButton.styleFrom(
-                  //         fixedSize: const Size(200, 60)),
-                  //     onPressed: () {
-                      
-                            widget(child: UserListScreen())); // Navigate to UserListScreen
-              //         },
-              //         child: const Text('View All Users'),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-            ]),
-          )
+            child: UserListScreen(),
+          ),
         ],
       ),
     );
   }
-  
-  widget({required UserListScreen child}) {}
 }
 
 void _showCreateUserDialog(BuildContext context) {
