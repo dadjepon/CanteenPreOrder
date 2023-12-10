@@ -26,6 +26,12 @@ class DatabaseService {
       .snapshots()
       .map((event) => event.docs.map((doc) => MenuItem.fromSnapshot(doc)));
 
+  Stream<Iterable<MenuItem>> foodsInCafeteria(String cafeteriaName) =>
+      menuCollection
+          .where('cafeteria', isEqualTo: cafeteriaName)
+          .snapshots()
+          .map((event) => event.docs.map((doc) => MenuItem.fromSnapshot(doc)));
+
   Stream<Iterable<CartItem>> allCartItems({required String userId}) {
     final cartCollection = FirebaseFirestore.instance
         .collection('cartCollection')
@@ -195,14 +201,24 @@ class DatabaseService {
       required String foodImage,
       required String cafeteria,
       required String price,
+      required String availabilityStatus,
+      required String menuType,
       required String timestamp}) async {
-    await menu.add({
+    var addedDoc = await foodCollection.add({
+      'foodDescription': foodDescription,
+      'foodImage': foodImage,
+      'foodName': foodName
+    });
+    await menuCollection.add({
       'cafeteria': cafeteria,
       'foodDescription': foodDescription,
       'price': price,
       'foodName': foodName,
       'foodImage': foodImage,
+      'availabilityStatus': availabilityStatus,
+      'menuType': menuType,
       'timestamp': timestamp,
+      'foodID': addedDoc.id
     });
   }
 
