@@ -12,9 +12,11 @@ import '../../models/auth_service/auth_service.dart';
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({super.key});
-
+  
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController instIDController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
   final TextEditingController confirmPasswordController =
@@ -27,6 +29,8 @@ class SignupScreen extends StatelessWidget {
     if (formKey.currentState!.validate()) {
       final name = nameController.text;
       final email = emailController.text;
+      final instID = instIDController.text;
+      final phoneNumber = phoneNumberController.text;
       const role = 'normal';
       final password = passwordController.text;
       final confirmPassword = confirmPasswordController.text;
@@ -37,7 +41,7 @@ class SignupScreen extends StatelessWidget {
         if (result != null) {
           // Registration was successful
           // Save user information to Firestore
-          await saveUserInfoToFirestore(name, email, role);
+          await saveUserInfoToFirestore(name, email, instID, phoneNumber, role);
 
           // You can navigate to the next screen or perform any other actions
           // For example, navigate to the dashboard
@@ -48,7 +52,7 @@ class SignupScreen extends StatelessWidget {
           Get.snackbar(
             'Registration Failed',
             'Please check your information and try again.',
-            backgroundColor: Colors.red,
+            backgroundColor: Color(0xFF6B0808),
           );
         }
       } else {
@@ -56,21 +60,25 @@ class SignupScreen extends StatelessWidget {
         Get.snackbar(
           'Error',
           'Passwords do not match.',
-          backgroundColor: Colors.red,
+          backgroundColor: Color(0xFF6B0808),
         );
       }
     }
   }
 
-  Future<void> saveUserInfoToFirestore(
-      String name, String email, String role) async {
+// TO DO: Send this to the model section later
+  Future<void> saveUserInfoToFirestore(String name, String email, String instID,
+      String phoneNumber, String role) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        await firestore
-            .collection('users')
-            .doc(user.uid)
-            .set({'name': name, 'email': email, 'role': role});
+        await firestore.collection('userCollection').doc(user.uid).set({
+          'name': name,
+          'email': email,
+          'phoneNumber': phoneNumber,
+          'instID': instID,
+          'role': role
+        });
       }
     } catch (e) {
       // ignore: avoid_print
@@ -83,8 +91,8 @@ class SignupScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 105, 4, 4),
         body: Center(
-          child: Form(
-            key: formKey,
+            child: Form(
+          key: formKey,
           child: Card(
             shadowColor: Colors.white,
             // margin: const EdgeInsets.only(top: 5.0),
@@ -135,6 +143,16 @@ class SignupScreen extends StatelessWidget {
                       fieldController: emailController,
                       keyboardType: TextInputType.emailAddress,
                     ),
+                    CustomTextField(
+                      labelText: "Phone Number ",
+                      fieldController: phoneNumberController,
+                      keyboardType: TextInputType.number,
+                    ),
+                    CustomTextField(
+                      labelText: "Instituition ID ",
+                      fieldController: instIDController,
+                      keyboardType: TextInputType.number,
+                    ),
 
                     //password input field
                     Padding(
@@ -171,48 +189,6 @@ class SignupScreen extends StatelessWidget {
                       ),
                     ),
 
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            // space around the field
-                            padding: const EdgeInsets.only(
-                                left: 15.0, right: 15.0, top: 15, bottom: 0),
-                            child: TextField(
-                              style: GoogleFonts.ubuntu(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                              controller: dobController,
-                              keyboardType: TextInputType.text,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-
-                                // labelText: 'Date',
-                                hintText: "Date Of Birth",
-                                suffixIcon: Icon(Icons.calendar_month),
-                              ),
-                              onTap: () {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                                showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime(2000),
-                                        firstDate: DateTime(2000),
-                                        lastDate: DateTime(2030))
-                                    .then(
-                                  (selectedDate) {
-                                    if (selectedDate != null) {
-                                      dobController.text = DateFormat.yMMMEd()
-                                          .format(selectedDate);
-                                    }
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 15.0, right: 15.0, top: 15, bottom: 0),
@@ -224,8 +200,11 @@ class SignupScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(5.0)),
                         child: TextButton(
                           onPressed: () async {
+                             final String dob = dobController.text;
                             final String email = emailController.text;
-                            final String dob = dobController.text;
+                            final String phoneNumber =
+                                phoneNumberController.text;
+                            final String instID = instIDController.text;
                             final String password = passwordController.text;
                             final String confirmPass =
                                 confirmPasswordController.text;
@@ -234,9 +213,14 @@ class SignupScreen extends StatelessWidget {
                                 r'^\w+([.-]?\w+)*@(ashesi\.edu\.gh|gmail\.com|aucampus\.onmicrosoft\.com)$');
 
                             if (email.isEmpty ||
-                                password.isEmpty ||
+
                                 dob.isEmpty ||
+                                confirmPass.isEmpty ||
+
+                                instID.isEmpty ||
+                                phoneNumber.isEmpty ||
                                 password.isEmpty ||
+
                                 fullName.isEmpty) {
                               await showErrorDialog(
                                 context,
@@ -252,6 +236,11 @@ class SignupScreen extends StatelessWidget {
                               await showErrorDialog(
                                 context,
                                 "Name is too long, try initials",
+                              );
+                            } else if (confirmPass != password) {
+                              await showErrorDialog(
+                                context,
+                                "Passwords do not match",
                               );
                             } else {
                               try {

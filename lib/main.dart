@@ -1,7 +1,5 @@
-
 import 'package:canteen_preorderapp/core/app_export.dart';
 import 'package:canteen_preorderapp/presentation/view_all_users.dart';
-
 
 void main() async {
   await GetStorage.init(); // Initialize GetStorage

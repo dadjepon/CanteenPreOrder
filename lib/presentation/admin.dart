@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, file_names, unused_local_variable
 
 import 'package:canteen_preorderapp/presentation/view_all_users.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,6 +49,8 @@ class AdminDashboardScreen extends GetView<AuthController> {
       builder: (BuildContext context) {
         TextEditingController nameController = TextEditingController();
         TextEditingController emailController = TextEditingController();
+        TextEditingController instIDController = TextEditingController();
+        TextEditingController phoneNumberController = TextEditingController();
         TextEditingController passwordController = TextEditingController();
         TextEditingController roleController = TextEditingController();
         TextEditingController companyController = TextEditingController();
@@ -63,6 +66,14 @@ class AdminDashboardScreen extends GetView<AuthController> {
                 TextField(
                     controller: emailController,
                     decoration: const InputDecoration(hintText: 'Email')),
+                TextField(
+                    controller: instIDController,
+                    decoration:
+                        const InputDecoration(hintText: 'Instuitional ID')),
+                TextField(
+                    controller: phoneNumberController,
+                    decoration:
+                        const InputDecoration(hintText: 'Phone Number')),
                 TextField(
                     controller: passwordController,
                     decoration: const InputDecoration(hintText: 'Password')),
@@ -82,6 +93,7 @@ class AdminDashboardScreen extends GetView<AuthController> {
                 Navigator.of(context).pop();
               },
             ),
+
            TextButton(
   child: const Text('Create'),
   onPressed: () {
@@ -91,19 +103,38 @@ class AdminDashboardScreen extends GetView<AuthController> {
       emailController.text,
       passwordController.text, 
       roleController.text, 
-      companyController.text
+      companyController.text,
+      phoneNumberController.text,
+      instIDController.text
     );
     Navigator.of(context).pop();
   },
 ),
+
+            TextButton(
+              child: const Text('Create'),
+              onPressed: () {
+                _createNewUser(
+                    nameController.text,
+                    emailController.text,
+                    phoneNumberController.text,
+                    instIDController.text,
+                    passwordController.text,
+                    roleController.text,
+                    companyController.text);
+                Navigator.of(context).pop();
+              },
+            ),
+
           ],
         );
       },
     );
   }
 
-  void _createNewUser(
-      String name, String email, String password, String role, String company) async {
+  void _createNewUser(String name, String email, String instID,
+      String phoneNumber, String password, String role, String company) async {
+
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -115,9 +146,13 @@ class AdminDashboardScreen extends GetView<AuthController> {
 
       if (userId.isNotEmpty) {
         // Store user details along with a flag indicating that password change is required
-        await FirebaseFirestore.instance.collection('users').doc(userId).set({
+        await FirebaseFirestore.instance
+            .collection('userCOllection')
+            .doc(userId)
+            .set({
           'name': name,
           'email': email,
+          '': email,
           'role': role,
           'requiresPasswordChange': true,
           'company': company,// Flag for mandatory password change
@@ -206,21 +241,3 @@ class AdminDashboardScreen extends GetView<AuthController> {
   }
 }
 
-class User {
-  final String name;
-  final String email;
-  final String role;
-
-  User({required this.name, required this.email, required this.role});
-
-  factory User.fromFirestore(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>? ?? {};
-
-    return User(
-      name: data['name'] ?? 'No Name', // Default value if 'name' is not found
-      email:
-          data['email'] ?? 'No Email', // Default value if 'email' is not found
-      role: data['role'] ?? 'No Role', // Default value if 'role' is not found
-    );
-  }
-}

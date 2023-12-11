@@ -192,9 +192,10 @@ class LoginScreen extends StatelessWidget {
                             }
                           }
                         },
-                        child: const Text(
+                        child: Text(
                           'Log in',
-                          style: TextStyle(color: Colors.white, fontSize: 15),
+                          style: GoogleFonts.ubuntu(
+                              color: Colors.white, fontSize: 15),
                         ),
                       ),
                     ),
@@ -210,9 +211,9 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () {
                       Get.toNamed('/signup');
                     },
-                    child: const Text(
+                    child: Text(
                       'Not registered yet? Sign up',
-                      style: TextStyle(
+                      style: GoogleFonts.ubuntu(
                           color: Color.fromARGB(255, 105, 4, 4),
                           fontStyle: FontStyle.italic),
                     ),
