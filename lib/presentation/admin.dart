@@ -15,33 +15,43 @@ class AdminDashboardScreen extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Dashboard'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () => _showCreateUserDialog(context),
-              child: const Text('Create New User'),
+
+      backgroundColor: Color.fromARGB(255, 244, 229, 229),
+      body: Row(
+        children: [
+          // Sidebar
+          Container(
+            width: 350,
+            color: Color.fromARGB(
+                255, 217, 64, 64), // You can set your desired sidebar color
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Sidebar Title
+                Text(
+                  'Admin Dashboard',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                // Add sidebar items here
+              ],
             ),
-            ElevatedButton(
-              onPressed: () => _showDeleteUserDialog(context),
-              child: const Text('Delete User'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Get.to(
-                    () => const UserListScreen()); // Navigate to UserListScreen
-              },
-              child: const Text('View All Users'),
-            ),
-          ],
-        ),
+          ),
+          // Main content
+          Expanded(
+            child: UserListScreen(),
+          ),
+        ],
       ),
     );
   }
+}
+
+
 
   void _showCreateUserDialog(BuildContext context) {
     showDialog(
@@ -53,6 +63,7 @@ class AdminDashboardScreen extends GetView<AuthController> {
         TextEditingController phoneNumberController = TextEditingController();
         TextEditingController passwordController = TextEditingController();
         TextEditingController roleController = TextEditingController();
+        TextEditingController companyController = TextEditingController();
 
         return AlertDialog(
           title: const Text('Create New User'),
@@ -79,6 +90,9 @@ class AdminDashboardScreen extends GetView<AuthController> {
                 TextField(
                     controller: roleController,
                     decoration: const InputDecoration(hintText: 'Role')),
+                TextField(
+                    controller: companyController,
+                    decoration: const InputDecoration(hintText: 'Name of Company')),
               ],
             ),
           ),
@@ -89,6 +103,24 @@ class AdminDashboardScreen extends GetView<AuthController> {
                 Navigator.of(context).pop();
               },
             ),
+
+           TextButton(
+  child: const Text('Create'),
+  onPressed: () {
+    // Ensure the parameters are in the correct order when calling the function.
+    _createNewUser(
+      nameController.text, 
+      emailController.text,
+      passwordController.text, 
+      roleController.text, 
+      companyController.text,
+      phoneNumberController.text,
+      instIDController.text
+    );
+    Navigator.of(context).pop();
+  },
+),
+
             TextButton(
               child: const Text('Create'),
               onPressed: () {
@@ -98,10 +130,12 @@ class AdminDashboardScreen extends GetView<AuthController> {
                     phoneNumberController.text,
                     instIDController.text,
                     passwordController.text,
-                    roleController.text);
+                    roleController.text,
+                    companyController.text);
                 Navigator.of(context).pop();
               },
             ),
+
           ],
         );
       },
@@ -109,7 +143,8 @@ class AdminDashboardScreen extends GetView<AuthController> {
   }
 
   void _createNewUser(String name, String email, String instID,
-      String phoneNumber, String password, String role) async {
+      String phoneNumber, String password, String role, String company) async {
+
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -129,7 +164,8 @@ class AdminDashboardScreen extends GetView<AuthController> {
           'email': email,
           '': email,
           'role': role,
-          'requiresPasswordChange': true, // Flag for mandatory password change
+          'requiresPasswordChange': true,
+          'company': company,// Flag for mandatory password change
         });
 
         print("User created successfully with email: $email");
@@ -215,33 +251,3 @@ class AdminDashboardScreen extends GetView<AuthController> {
   }
 }
 
-// class User {
-//   final String name;
-//   final String email;
-//   final String instID;
-//   final String phoneNumber;
-//   final String role;
-
-//   User(
-//       {required this.name,
-//       required this.email,
-//       required this.instID,
-//       required this.phoneNumber,
-//       required this.role});
-
-//   factory User.fromFirestore(DocumentSnapshot doc) {
-//     Map<String, dynamic> data = doc.data() as Map<String, dynamic>? ?? {};
-
-//     return User(
-//       name: data['name'] ?? 'No Name', // Default value if 'name' is not found
-//       email:
-//           data['email'] ?? 'No Email', // Default value if 'email' is not found
-//       instID: data['instID'] ??
-//           'No Instituitional ID', // Default value if 'instituitional ID' is not found
-//       phoneNumber:
-//           data['phoneNumber'] ?? // Default value if 'phone number' is not found
-//               'No phone number',
-//       role: data['role'] ?? 'No Role', // Default value if 'role' is not found
-//     );
-//   }
-// }

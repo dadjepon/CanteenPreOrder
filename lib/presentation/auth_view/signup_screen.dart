@@ -202,6 +202,9 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(5.0)),
                         child: TextButton(
                           onPressed: () async {
+
+                             final String dob = dobController.text;
+
                             final String email = emailController.text;
                             final String phoneNumber =
                                 phoneNumberController.text;
