@@ -5,6 +5,7 @@ import 'package:canteen_preorderapp/models/customer_model.dart';
 import 'package:canteen_preorderapp/models/food_item.dart';
 import 'package:canteen_preorderapp/models/menu_item.dart';
 import 'package:canteen_preorderapp/models/order_item.dart';
+import 'package:canteen_preorderapp/models/staff_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
@@ -129,6 +130,20 @@ class DatabaseService {
     }).first;
   }
 
+  Future<StaffItem> getStaff({required String userId}) async {
+    return usersCollection
+        .where(FieldPath.documentId, isEqualTo: userId)
+        .snapshots()
+        .map((querySnapshot) {
+      final documents = querySnapshot.docs;
+      if (documents.isEmpty) {
+        // handle error when no document is found
+        throw CouldNotFindUserException();
+      }
+      return StaffItem.fromSnapshot(documents.first);
+    }).first;
+  }
+
   Future<FoodItem> getFoodItem({required String foodID}) async {
     return foodCollection
         .where(FieldPath.documentId, isEqualTo: foodID)
@@ -218,6 +233,22 @@ class DatabaseService {
     }
   }
 
+  Future<void> removeFromMenu(String foodItemId) async {
+    final menuCollection = FirebaseFirestore.instance
+        .collection('menuCollection');
+    // Check if the item already exists in the cart
+    var existingMenuItem =
+        await menuCollection.where(FieldPath.documentId, isEqualTo: foodItemId).get();
+
+    if (existingMenuItem.docs.isEmpty) {
+      return;
+    } else {
+      // If the item is already in the cart, update the quantity
+      var MenuItem = existingMenuItem.docs.first;
+    MenuItem.reference.delete();
+    }
+  }
+
   Future<void> addFoodItem(
       {required String foodName,
       required String foodDescription,
@@ -283,6 +314,20 @@ class DatabaseService {
     } catch (e) {
       // ignore: avoid_print
       print('Error saving user information to Firestore: $e');
+    }
+  }
+
+  Future<void> removeUser(String userId) async {
+    var existingUsers = await usersCollection
+        .where(FieldPath.documentId, isEqualTo: userId)
+        .get();
+
+    if (existingUsers.docs.isEmpty) {
+      return;
+    } else {
+      // If the item is already in the cart, update the quantity
+      var User = existingUsers.docs.first;
+      User.reference.delete();
     }
   }
 

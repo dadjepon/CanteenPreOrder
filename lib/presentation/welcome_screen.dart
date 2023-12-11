@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -15,7 +13,8 @@ class SplashScreen extends StatelessWidget {
       deviceType,
     ) {
       return Scaffold(
-        backgroundColor: Color.fromARGB(255, 217, 64, 64),
+        backgroundColor: Color.fromARGB(255, 92, 9, 9),
+        //  Color.fromARGB(255, 111, 5, 5),
         body: Center(
           // Center the content for larger screens
           child: ConstrainedBox(
