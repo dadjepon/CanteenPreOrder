@@ -50,6 +50,7 @@ class AdminDashboardScreen extends GetView<AuthController> {
         TextEditingController emailController = TextEditingController();
         TextEditingController passwordController = TextEditingController();
         TextEditingController roleController = TextEditingController();
+        TextEditingController companyController = TextEditingController();
 
         return AlertDialog(
           title: const Text('Create New User'),
@@ -68,6 +69,9 @@ class AdminDashboardScreen extends GetView<AuthController> {
                 TextField(
                     controller: roleController,
                     decoration: const InputDecoration(hintText: 'Role')),
+                TextField(
+                    controller: companyController,
+                    decoration: const InputDecoration(hintText: 'Name of Company')),
               ],
             ),
           ),
@@ -78,14 +82,20 @@ class AdminDashboardScreen extends GetView<AuthController> {
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(
-              child: const Text('Create'),
-              onPressed: () {
-                _createNewUser(nameController.text, emailController.text,
-                    passwordController.text, roleController.text);
-                Navigator.of(context).pop();
-              },
-            ),
+           TextButton(
+  child: const Text('Create'),
+  onPressed: () {
+    // Ensure the parameters are in the correct order when calling the function.
+    _createNewUser(
+      nameController.text, 
+      emailController.text,
+      passwordController.text, 
+      roleController.text, 
+      companyController.text
+    );
+    Navigator.of(context).pop();
+  },
+),
           ],
         );
       },
@@ -93,7 +103,7 @@ class AdminDashboardScreen extends GetView<AuthController> {
   }
 
   void _createNewUser(
-      String name, String email, String password, String role) async {
+      String name, String email, String password, String role, String company) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -109,7 +119,8 @@ class AdminDashboardScreen extends GetView<AuthController> {
           'name': name,
           'email': email,
           'role': role,
-          'requiresPasswordChange': true, // Flag for mandatory password change
+          'requiresPasswordChange': true,
+          'company': company,// Flag for mandatory password change
         });
 
         print("User created successfully with email: $email");

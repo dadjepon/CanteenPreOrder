@@ -39,6 +39,7 @@ class StaffDashboardScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Add functionality for View Dashboard
+                  Get.toNamed('/view_staff_dashboard');
                   
                 },
                 child: const Text('View Dashboard'),
@@ -55,6 +56,7 @@ class StaffDashboardScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Add functionality for View Orders
+                  Get.toNamed('/view_order');
                 },
                 child: const Text('View Orders'),
                 style: ElevatedButton.styleFrom(
