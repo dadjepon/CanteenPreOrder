@@ -1,6 +1,9 @@
 import 'package:canteen_preorderapp/core/app_export.dart';
 import 'package:canteen_preorderapp/models/auth_service/firebase_service.dart';
+import 'package:canteen_preorderapp/models/database_service.dart';
+import 'package:canteen_preorderapp/models/menu_item.dart';
 import 'package:canteen_preorderapp/widgets/custom_dialogs/show_logout_dialog.dart';
+import 'package:canteen_preorderapp/widgets/designs/food_grid.dart';
 import 'package:flutter/material.dart';
 import '../models/auth_service/auth_controller.dart';
 import 'package:get/get.dart';
@@ -23,11 +26,14 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
     'Processing',
     'Done'
   ];
+  String cafeteria = "";
+  late final DatabaseService databaseService;
   String _selectedFilter = 'All';
   // late final DatabaseService _dataService;
 
   @override
   void initState() {
+    databaseService = DatabaseService();
     // _dataService = DatabaseService();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
@@ -36,7 +42,7 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
         print('_activeIndex: $_activeIndex');
       });
     });
-    super.initState();
+    getCafeteria();
   }
 
   @override
@@ -45,10 +51,22 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
     super.dispose();
   }
 
+  void getCafeteria() async {
+    var staffItem = await databaseService.getStaff(
+        userId: FirebaseAuthService().currentUser!.id);
+    setState(() {
+      cafeteria = staffItem.cafeteria;
+    });
+  }
+
   int _activeIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    print(cafeteria);
+    Stream<Iterable<MenuItem>> currStream =
+        databaseService.foodsInCafeteria(cafeteria!);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF6B0808), // AppBar's custom background color
@@ -132,37 +150,7 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
                         ),
                       );
                     }).toList(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Add functionality for View Dashboard
-                  Get.toNamed('/view_staff_dashboard');
-                  
-                },
-                child: const Text('View Dashboard'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Add functionality for View Orders
-                  Get.toNamed('/view_order');
-                },
-                child: const Text('View Orders'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                )
+                  ))
               : Text(""),
           Expanded(
             child: TabBarView(
@@ -170,7 +158,10 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
               children: [
                 Text("All Orders Placed"),
                 AddFoodItemScreen(),
-                Text("View Menu"),
+                FoodGridScreen(
+                  currStream: currStream,
+                  page: "StaffDashboard",
+                ),
               ],
             ),
           ),

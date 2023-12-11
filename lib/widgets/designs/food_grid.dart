@@ -6,9 +6,11 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FoodGridScreen extends StatefulWidget {
-  const FoodGridScreen({super.key, required this.currStream});
+  const FoodGridScreen(
+      {super.key, required this.currStream, required this.page});
 
   final Stream<Iterable<MenuItem>> currStream;
+  final String page;
 
   @override
   State<FoodGridScreen> createState() => _FoodGridScreenState();
@@ -133,62 +135,78 @@ class _FoodGridScreenState extends State<FoodGridScreen> {
                                       "Ghc " + menuItem.price,
                                       style: theme.textTheme.titleLarge,
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 50.h),
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          if (menuItem.availabilityStatus ==
-                                              "Yes") {
-                                            _dataService.addToCart(
-                                                usedId: FirebaseAuthService()
-                                                    .currentUser!
-                                                    .id,
-                                                menuItem.menuItemId);
+                                    widget.page != "StaffDashboard"
+                                        ? Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 50.h),
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                if (menuItem
+                                                        .availabilityStatus ==
+                                                    "Yes") {
+                                                  _dataService.addToCart(
+                                                      usedId:
+                                                          FirebaseAuthService()
+                                                              .currentUser!
+                                                              .id,
+                                                      menuItem.menuItemId);
 
-                                            _dataService
-                                                .allCartItems(
-                                                    userId:
-                                                        FirebaseAuthService()
-                                                            .currentUser!
-                                                            .id)
-                                                .length
-                                                .then(
-                                                    (value) => print("value"));
+                                                  _dataService
+                                                      .allCartItems(
+                                                          userId:
+                                                              FirebaseAuthService()
+                                                                  .currentUser!
+                                                                  .id)
+                                                      .length
+                                                      .then((value) =>
+                                                          print("value"));
 
-                                            final snackbar = SnackBar(
-                                              // duration: const Duration(seconds: 5),
-                                              content: Text(
-                                                'Item successfully added to cart',
-                                                style: GoogleFonts.ubuntu(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              backgroundColor: Color.fromARGB(
-                                                  255, 105, 4, 4),
-                                              elevation: 5,
-                                            );
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(snackbar);
-                                          } else {
-                                            final snackbar = SnackBar(
-                                              // duration: const Duration(seconds: 5),
-                                              content: Text(
-                                                'Sorry, the food is finished.',
-                                                style: GoogleFonts.ubuntu(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              backgroundColor: Color.fromARGB(
-                                                  255, 105, 4, 4),
-                                              elevation: 5,
-                                            );
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(snackbar);
-                                          }
-                                        },
-                                        child: Text("Buy"),
-                                      ),
-                                    ),
+                                                  final snackbar = SnackBar(
+                                                    // duration: const Duration(seconds: 5),
+                                                    content: Text(
+                                                      'Item successfully added to cart',
+                                                      style: GoogleFonts.ubuntu(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    backgroundColor:
+                                                        Color.fromARGB(
+                                                            255, 105, 4, 4),
+                                                    elevation: 5,
+                                                  );
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackbar);
+                                                } else {
+                                                  final snackbar = SnackBar(
+                                                    // duration: const Duration(seconds: 5),
+                                                    content: Text(
+                                                      'Sorry, the food is finished.',
+                                                      style: GoogleFonts.ubuntu(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    backgroundColor:
+                                                        Color.fromARGB(
+                                                            255, 105, 4, 4),
+                                                    elevation: 5,
+                                                  );
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackbar);
+                                                }
+                                              },
+                                              child: Text("Buy"),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 50.h),
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                _dataService.removeFromMenu(
+                                                    menuItem.menuItemId);
+                                              },
+                                              child: Text("Delete"),
+                                            )),
                                   ],
                                 ),
                               ),
