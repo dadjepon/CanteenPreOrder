@@ -19,16 +19,7 @@ class _CurrentOrdersScreenState extends State<CurrentOrdersScreen> {
   @override
   void initState() {
     _dataService = DatabaseService();
-    getTotalPrice(userId: FirebaseAuthService().currentUser!.id);
     super.initState();
-  }
-
-  num amount = 0;
-
-  getTotalPrice({required String userId}) async {
-    amount = await _dataService.calculatingTotalPrice(
-        userId: FirebaseAuthService().currentUser!.id);
-    setState(() {});
   }
 
   @override

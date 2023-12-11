@@ -25,7 +25,8 @@ class FoodAppHome extends StatefulWidget {
 class _FoodAppHomeState extends State<FoodAppHome>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
-  final List<String> _filterOptions = ['All', 'Munchies', 'Akornor', 'Big Ben'];
+  int _activeIndex = 0;
+  List<String> _filterOptions = ['Munchies', 'Akornor', 'Big Ben'];
   String _selectedFilter = 'All';
   late final DatabaseService _dataService;
   late Stream<Iterable<MenuItem>> currStream;
@@ -50,10 +51,11 @@ class _FoodAppHomeState extends State<FoodAppHome>
     super.dispose();
   }
 
-  int _activeIndex = 0;
-
   @override
   Widget build(BuildContext context) {
+    _filterOptions = _activeIndex == 0
+        ? ['All', 'Munchies', 'Akornor', 'Big Ben']
+        : ['Munchies', 'Akornor', 'Big Ben'];
     return Scaffold(
       appBar: AppBar(
         backgroundColor:
@@ -74,6 +76,7 @@ class _FoodAppHomeState extends State<FoodAppHome>
                   child: StreamBuilder(
                     stream: _dataService.allCartItems(
                       userId: FirebaseAuthService().currentUser!.id,
+                      cafeteria: _selectedFilter,
                     ),
                     builder: (context, snapshot) {
                       var cartItemsLength = 0;
@@ -164,7 +167,9 @@ class _FoodAppHomeState extends State<FoodAppHome>
                   currStream: currStream,
                   page: "CustomerDashboard",
                 ),
-                CartView(),
+                CartView(
+                  cafeteria: _selectedFilter,
+                ),
                 SfProfileScreen(),
                 CurrentOrdersScreen(),
               ],
