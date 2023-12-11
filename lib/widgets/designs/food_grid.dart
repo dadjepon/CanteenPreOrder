@@ -143,14 +143,19 @@ class _FoodGridScreenState extends State<FoodGridScreen> {
                                                 usedId: FirebaseAuthService()
                                                     .currentUser!
                                                     .id,
-                                                menuItem.menuItemId);
+                                                cafeteriaName:
+                                                    menuItem.cafeteria,
+                                                foodItemId:
+                                                    menuItem.menuItemId);
 
                                             _dataService
                                                 .allCartItems(
                                                     userId:
                                                         FirebaseAuthService()
                                                             .currentUser!
-                                                            .id)
+                                                            .id,
+                                                    cafeteria:
+                                                        menuItem.cafeteria)
                                                 .length
                                                 .then(
                                                     (value) => print("value"));

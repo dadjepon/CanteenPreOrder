@@ -21,6 +21,8 @@ class DatabaseService {
 
   final ordersCollection =
       FirebaseFirestore.instance.collection('ordersCollection');
+  final canteenOrdersCollection =
+      FirebaseFirestore.instance.collection('canteenOrdersCollection');
 
   Stream<Iterable<MenuItem>> allFoods() => menuCollection
       .snapshots()
@@ -32,11 +34,12 @@ class DatabaseService {
           .snapshots()
           .map((event) => event.docs.map((doc) => MenuItem.fromSnapshot(doc)));
 
-  Stream<Iterable<CartItem>> allCartItems({required String userId}) {
+  Stream<Iterable<CartItem>> allCartItems(
+      {required String userId, required String cafeteria}) {
     final cartCollection = FirebaseFirestore.instance
         .collection('cartCollection')
         .doc(userId)
-        .collection(userId);
+        .collection(cafeteria);
     return cartCollection
         .snapshots()
         .map((event) => event.docs.map((doc) => CartItem.fromSnapshot(doc)));
@@ -55,15 +58,17 @@ class DatabaseService {
       required String paymentRef,
       required String amount,
       required String orderStage,
-      required String timestamp}) async {
+      required String timestamp,
+      required String cafeteria}) async {
     final cartCollection = FirebaseFirestore.instance
         .collection('cartCollection')
         .doc(userId)
-        .collection(userId);
+        .collection(cafeteria);
     QuerySnapshot snap = await cartCollection.get();
     final allData = snap.docs.map((doc) => doc.data()).toList();
     await ordersCollection.doc(userId).collection(userId).add({
       'orderId': orderId,
+      'cafeteria': cafeteria,
       'paymentRef': paymentRef,
       'amount': amount,
       'orderCollection': allData,
@@ -77,15 +82,27 @@ class DatabaseService {
       batch.delete(doc.reference);
     }
     await batch.commit();
+    await canteenOrdersCollection
+        .doc("canteenOrders")
+        .collection(cafeteria)
+        .add({
+      'orderId': orderId,
+      'paymentRef': paymentRef,
+      'amount': amount,
+      'orderCollection': allData,
+      'timestamp': timestamp,
+      'orderStage': orderStage,
+    });
   }
 
-  Future<num> calculatingTotalPrice({required String userId}) async {
+  Future<num> calculatingTotalPrice(
+      {required String userId, required String cafeteria}) async {
     num amount = 0;
     final firestoreInstance = FirebaseFirestore.instance;
     QuerySnapshot qSnaps = await firestoreInstance
         .collection("cartCollection")
         .doc(userId)
-        .collection(userId)
+        .collection(cafeteria)
         .get();
 
     if (qSnaps.docs.length == 0) amount = 0;
@@ -140,11 +157,14 @@ class DatabaseService {
     }).first;
   }
 
-  Future<void> addToCart(String foodItemId, {required String usedId}) async {
+  Future<void> addToCart(
+      {required String foodItemId,
+      required String cafeteriaName,
+      required String usedId}) async {
     final cartCollection = FirebaseFirestore.instance
         .collection('cartCollection')
         .doc(usedId)
-        .collection(usedId);
+        .collection(cafeteriaName);
     // Check if the item already exists in the cart
     var existingCartItem =
         await cartCollection.where('foodItemId', isEqualTo: foodItemId).get();
@@ -170,12 +190,15 @@ class DatabaseService {
     }
   }
 
-  Future<void> removeFromCart(String foodItemId,
-      {required String usedId}) async {
+  Future<void> removeFromCart({
+    required String foodItemId,
+    required String usedId,
+    required String cafeteriaName,
+  }) async {
     final cartCollection = FirebaseFirestore.instance
         .collection('cartCollection')
         .doc(usedId)
-        .collection(usedId);
+        .collection(cafeteriaName);
     // Check if the item already exists in the cart
     var existingCartItem =
         await cartCollection.where('foodItemId', isEqualTo: foodItemId).get();
@@ -222,14 +245,16 @@ class DatabaseService {
     });
   }
 
-  Future<void> savePaymentData(
-      {required String orderId,
-      required String paymentId,
-      required String status,
-      required String reference,
-      required String amount,
-      required String gateWayResponse,
-      required String receiptNumber}) async {
+  Future<void> savePaymentData({
+    required String orderId,
+    required String paymentId,
+    required String status,
+    required String reference,
+    required String amount,
+    required String gateWayResponse,
+    required String receiptNumber,
+    required String cafeteria,
+  }) async {
     await paymentsCollection.add({
       'reference': reference,
       'paymentId': paymentId,
@@ -238,6 +263,7 @@ class DatabaseService {
       'paymentStatus': status,
       'gateWayResponse': gateWayResponse,
       'receiptNumber': receiptNumber,
+      'cafeteria': cafeteria,
     });
   }
 

@@ -41,6 +41,8 @@ class PaymentPage extends StatefulWidget {
 
     required this.orderId,
 
+    required this.cafeteria,
+
   });
 
 
@@ -54,6 +56,9 @@ class PaymentPage extends StatefulWidget {
 
 
   final String orderId;
+
+
+  final String cafeteria;
 
 
   @override
@@ -187,6 +192,8 @@ class _PaymentPage extends State<PaymentPage> {
 
               amount: widget.amount,
 
+              cafeteria: widget.cafeteria,
+
               gateWayResponse:
 
                   responseData['data']['gateway_response'].toString(),
@@ -205,6 +212,8 @@ class _PaymentPage extends State<PaymentPage> {
               amount: widget.amount,
 
               orderStage: '1',
+
+              cafeteria: widget.cafeteria,
 
               timestamp: timestamp.toString());
 

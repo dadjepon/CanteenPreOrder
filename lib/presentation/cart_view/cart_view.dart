@@ -8,7 +8,9 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CartView extends StatefulWidget {
-  const CartView({super.key});
+  const CartView({super.key, required this.cafeteria});
+
+  final String cafeteria;
 
   @override
   State<CartView> createState() => _CartViewState();
@@ -28,8 +30,35 @@ class _CartViewState extends State<CartView> {
 
   getTotalPrice({required String userId}) async {
     amount = await _dataService.calculatingTotalPrice(
-        userId: FirebaseAuthService().currentUser!.id);
+        userId: FirebaseAuthService().currentUser!.id,
+        cafeteria: widget.cafeteria);
     setState(() {});
+  }
+
+  void _showPopupMenu() async {
+    await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(300, 300, 300, 300),
+      items: [
+        PopupMenuItem(
+          value: 1,
+          child: Text("View"),
+        ),
+        PopupMenuItem(
+          height: 200,
+          value: 2,
+          child: Text("Edit"),
+        ),
+        PopupMenuItem(
+          value: 3,
+          child: Text("Delete"),
+        ),
+      ],
+      elevation: 8.0,
+    ).then((value) {
+      // NOTE: even you didnt select item this method will be called with null of value so you should call your call back with checking if value is not null , value is the value given in PopupMenuItem
+      if (value != null) print(value);
+    });
   }
 
   @override
@@ -47,12 +76,15 @@ class _CartViewState extends State<CartView> {
             int timestamp = DateTime.now().millisecondsSinceEpoch;
             String id = FirebaseAuthService().currentUser!.id;
 
+            // _showPopupMenu();
+
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => PaymentPage(
                   orderId: "${timestamp}_${id}",
                   amount: "$amount",
+                  cafeteria: widget.cafeteria,
                   email: FirebaseAuthService().currentUser!.email,
                   reference: "${timestamp}_${id}",
                 ),
@@ -68,7 +100,8 @@ class _CartViewState extends State<CartView> {
           height: MediaQuery.of(context).size.height * 0.7,
           child: StreamBuilder(
             stream: _dataService.allCartItems(
-                userId: FirebaseAuthService().currentUser!.id),
+                userId: FirebaseAuthService().currentUser!.id,
+                cafeteria: widget.cafeteria),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.active:
@@ -77,7 +110,8 @@ class _CartViewState extends State<CartView> {
                   if (snapshot.hasData) {
                     final cartItems = snapshot.data as Iterable<CartItem>;
                     _dataService.calculatingTotalPrice(
-                        userId: FirebaseAuthService().currentUser!.id)
+                        userId: FirebaseAuthService().currentUser!.id,
+                        cafeteria: widget.cafeteria)
                       ..then((value) {
                         setState(() {
                           getTotalPrice(
@@ -193,17 +227,20 @@ class _CartViewState extends State<CartView> {
                                         quantity: cartItem.quantity,
                                         onAdd: (qty) {
                                           _dataService.addToCart(
-                                              usedId: FirebaseAuthService()
-                                                  .currentUser!
-                                                  .id,
-                                              cartItem.foodItemId);
+                                            usedId: FirebaseAuthService()
+                                                .currentUser!
+                                                .id,
+                                            foodItemId: cartItem.foodItemId,
+                                            cafeteriaName: widget.cafeteria,
+                                          );
                                         },
                                         onRemove: (qty) {
                                           _dataService.removeFromCart(
                                               usedId: FirebaseAuthService()
                                                   .currentUser!
                                                   .id,
-                                              cartItem.foodItemId);
+                                              foodItemId: cartItem.foodItemId,
+                                              cafeteriaName: widget.cafeteria);
                                         },
                                       ),
                                     )
