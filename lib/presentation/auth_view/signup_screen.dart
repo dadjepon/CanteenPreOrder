@@ -12,7 +12,7 @@ import '../../models/auth_service/auth_service.dart';
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({super.key});
-
+  
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController instIDController = TextEditingController();
@@ -200,7 +200,9 @@ class SignupScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(5.0)),
                         child: TextButton(
                           onPressed: () async {
-                            final String dob = dobController.text;
+
+                             final String dob = dobController.text;
+
                             final String email = emailController.text;
                             final String phoneNumber =
                                 phoneNumberController.text;
