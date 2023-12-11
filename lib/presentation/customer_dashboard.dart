@@ -162,6 +162,7 @@ class _FoodAppHomeState extends State<FoodAppHome>
               children: [
                 FoodGridScreen(
                   currStream: currStream,
+                  page: "CustomerDashboard",
                 ),
                 CartView(),
                 SfProfileScreen(),
