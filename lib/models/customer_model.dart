@@ -9,13 +9,15 @@ class CustomerItem {
   final String customerName;
   final String customerPhoneNumber;
   final String institutionId;
+  String role;
 
-  const CustomerItem({
+  CustomerItem({
     required this.documentId,
     required this.customerEmail,
     required this.customerName,
     required this.customerPhoneNumber,
     required this.institutionId,
+    required this.role,
   });
 
   CustomerItem.fromSnapshot(
@@ -24,5 +26,6 @@ class CustomerItem {
         customerEmail = snapshot.data()[customerEmailField],
         customerName = snapshot.data()[customerNameField],
         institutionId = snapshot.data()[institutionIdField],
-        customerPhoneNumber = snapshot.data()[customerPhoneNumberField];
+        customerPhoneNumber = snapshot.data()[customerPhoneNumberField],
+        role = snapshot.data()[roleField];
 }

@@ -56,7 +56,8 @@ class _FoodAppHomeState extends State<FoodAppHome>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF6B0808), // AppBar's custom background color
+        backgroundColor:
+            Color.fromARGB(255, 111, 5, 5), // AppBar's custom background color
         bottom: new PreferredSize(
           preferredSize: new Size(24.0, 24.0),
           child: Container(
