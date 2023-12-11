@@ -4,9 +4,8 @@ import 'package:canteen_preorderapp/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class UserListScreen extends StatefulWidget {
-  const UserListScreen({super.key});
+  const UserListScreen({Key? key}) : super(key: key);
 
   @override
   _UserListScreenState createState() => _UserListScreenState();
@@ -17,6 +16,7 @@ class _UserListScreenState extends State<UserListScreen> {
   List<User> filteredUsers = [];
   String selectedRole = 'All'; // Default value to show all roles
   List<String> roles = ['All', 'admin', 'staff', 'normal']; // List of roles
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _UserListScreenState extends State<UserListScreen> {
 
   void _loadUsers() async {
     FirebaseFirestore.instance
-        .collection('userCollection')
+        .collection('usersCollection')
         .get()
         .then((QuerySnapshot querySnapshot) {
       setState(() {
@@ -37,13 +37,20 @@ class _UserListScreenState extends State<UserListScreen> {
     });
   }
 
-  void _filterUsers(String role) {
+  void _filterUsers(String role, String query) {
     setState(() {
       if (role == 'All') {
         filteredUsers = List.from(users);
       } else {
         filteredUsers = users.where((user) => user.role == role).toList();
       }
+
+      // Apply search filter
+      filteredUsers = filteredUsers
+          .where((user) =>
+              user.name.toLowerCase().contains(query.toLowerCase()) ||
+              user.email.toLowerCase().contains(query.toLowerCase()))
+          .toList();
     });
   }
 
@@ -55,12 +62,29 @@ class _UserListScreenState extends State<UserListScreen> {
       ),
       body: Column(
         children: [
+          // Search bar
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: searchController,
+              onChanged: (query) {
+                setState(() {
+                  _filterUsers(selectedRole, query);
+                });
+              },
+              decoration: InputDecoration(
+                hintText: ' Search ',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          // Role dropdown
           DropdownButton<String>(
             value: selectedRole,
             onChanged: (String? newValue) {
               setState(() {
                 selectedRole = newValue!;
-                _filterUsers(selectedRole);
+                _filterUsers(selectedRole, searchController.text);
               });
             },
             items: roles.map<DropdownMenuItem<String>>((String value) {
@@ -70,6 +94,7 @@ class _UserListScreenState extends State<UserListScreen> {
               );
             }).toList(),
           ),
+          // User list
           Expanded(
             child: ListView.builder(
               itemCount: filteredUsers.length,
@@ -85,5 +110,11 @@ class _UserListScreenState extends State<UserListScreen> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 }
