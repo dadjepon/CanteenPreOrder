@@ -6,18 +6,21 @@ class User {
   final String instID;
   final String phoneNumber;
   final String role;
+  final String userId;
 
   User(
       {required this.name,
       required this.email,
       required this.instID,
       required this.phoneNumber,
-      required this.role});
+      required this.role,
+      required this.userId});
 
   factory User.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>? ?? {};
 
     return User(
+      userId: doc.id,
       name: data['name'] ?? 'No Name', // Default value if 'name' is not found
       email:
           data['email'] ?? 'No Email', // Default value if 'email' is not found

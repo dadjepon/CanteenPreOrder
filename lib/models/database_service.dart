@@ -291,6 +291,20 @@ class DatabaseService {
     }
   }
 
+  Future<void> removeUser(String userId) async {
+    var existingUsers = await usersCollection
+        .where(FieldPath.documentId, isEqualTo: userId)
+        .get();
+
+    if (existingUsers.docs.isEmpty) {
+      return;
+    } else {
+      // If the item is already in the cart, update the quantity
+      var User = existingUsers.docs.first;
+      User.reference.delete();
+    }
+  }
+
   //creating a singleton to mantains the same instance across the application
   static final DatabaseService _shared = DatabaseService._sharedInstance();
   DatabaseService._sharedInstance();
