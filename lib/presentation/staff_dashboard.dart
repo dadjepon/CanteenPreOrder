@@ -39,6 +39,7 @@ class StaffDashboardScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Add functionality for View Dashboard
+                  Get.toNamed('/view');
                   
                 },
                 child: const Text('View Dashboard'),

@@ -20,3 +20,4 @@ export 'package:canteen_preorderapp/models/auth_service/auth_controller.dart';
 export 'package:canteen_preorderapp/presentation/auth_view/login_screen.dart';
 export 'package:canteen_preorderapp/presentation/welcome_screen.dart';
 export 'package:canteen_preorderapp/presentation/menu_update.dart';
+export 'package:canteen_preorderapp/presentation/new_staff_Dashboard.dart';

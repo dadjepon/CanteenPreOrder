@@ -31,6 +31,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/staff', page: () => StaffDashboardScreen()),
         GetPage(name: '/viewAllUsers', page: () => const UserListScreen()),
         GetPage(name: '/menu_update', page: () => UploadImageScreen()),
+        //GetPage(name: '/new_dashboard', page: () => NewDashboardScreen()),
+        //GetPage(name: '/new_dashboard', page: () => NewDashboardScreen()),
 // Add GetPage entries for other new screens as well
 
         // Signup screen route
