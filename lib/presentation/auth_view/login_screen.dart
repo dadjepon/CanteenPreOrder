@@ -41,7 +41,7 @@ class LoginScreen extends StatelessWidget {
         Get.snackbar(
           'Login Failed',
           'Please check your information and try again.',
-          backgroundColor: Colors.red,
+          backgroundColor: Color.fromARGB(255, 242, 58, 58),
         );
       }
     } catch (e) {
@@ -52,7 +52,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 105, 4, 4),
+      backgroundColor: Color.fromARGB(255, 111, 5, 5),
       body: Center(
         child: Card(
           shadowColor: Colors.white,
@@ -214,7 +214,7 @@ class LoginScreen extends StatelessWidget {
                     child: Text(
                       'Not registered yet? Sign up',
                       style: GoogleFonts.ubuntu(
-                          color: Color.fromARGB(255, 105, 4, 4),
+                          color: Color.fromARGB(255, 159, 10, 10),
                           fontStyle: FontStyle.italic),
                     ),
                   ),
