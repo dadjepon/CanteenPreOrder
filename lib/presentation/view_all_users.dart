@@ -4,22 +4,6 @@ import 'package:canteen_preorderapp/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-// class User {
-//   final String name;
-//   final String email;
-//   final String role;
-
-//   User({required this.name, required this.email, required this.role});
-
-//   factory User.fromFirestore(DocumentSnapshot doc) {
-//     Map<String, dynamic> data = doc.data() as Map<String, dynamic>? ?? {};
-//     return User(
-//       name: data['name'] ?? 'No Name',
-//       email: data['email'] ?? 'No Email',
-//       role: data['role'] ?? 'No Role',
-//     );
-//   }
-// }
 
 class UserListScreen extends StatefulWidget {
   const UserListScreen({super.key});
