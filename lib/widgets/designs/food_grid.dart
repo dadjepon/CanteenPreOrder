@@ -135,9 +135,11 @@ class _FoodGridScreenState extends State<FoodGridScreen> {
                                       "Ghc " + menuItem.price,
                                       style: theme.textTheme.titleLarge,
                                     ),
-
+                                    widget.page != "StaffDashboard"
+                                        ?
                                     Padding(
                                       padding: EdgeInsets.only(left: 50.h),
+                                      
                                       child: ElevatedButton(
                                         onPressed: () async {
                                           if (menuItem.availabilityStatus ==
@@ -162,31 +164,6 @@ class _FoodGridScreenState extends State<FoodGridScreen> {
                                                 .length
                                                 .then(
                                                     (value) => print("value"));
-                                    widget.page != "StaffDashboard"
-                                        ? Padding(
-                                            padding:
-                                                EdgeInsets.only(left: 50.h),
-                                            child: ElevatedButton(
-                                              onPressed: () async {
-                                                if (menuItem
-                                                        .availabilityStatus ==
-                                                    "Yes") {
-                                                  _dataService.addToCart(
-                                                      usedId:
-                                                          FirebaseAuthService()
-                                                              .currentUser!
-                                                              .id,
-                                                      menuItem.menuItemId);
-
-                                                  _dataService
-                                                      .allCartItems(
-                                                          userId:
-                                                              FirebaseAuthService()
-                                                                  .currentUser!
-                                                                  .id)
-                                                      .length
-                                                      .then((value) =>
-                                                          print("value"));
 
                                                   final snackbar = SnackBar(
                                                     // duration: const Duration(seconds: 5),

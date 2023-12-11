@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import '../models/auth_service/auth_controller.dart';
 import 'package:get/get.dart';
 
-// import 'package:canteen_preorderapp/models/database_service.dart';
 
 class StaffDashboardScreen extends StatefulWidget {
   StaffDashboardScreen({Key? key}) : super(key: key);
@@ -29,7 +28,7 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
   String cafeteria = "";
   late final DatabaseService databaseService;
   String _selectedFilter = 'All';
-  // late final DatabaseService _dataService;
+  late final DatabaseService _dataService;
 
   @override
   void initState() {
@@ -64,7 +63,7 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
   @override
   Widget build(BuildContext context) {
     Stream<Iterable<MenuItem>> currStream =
-        databaseService.foodsInCafeteria(cafeteria!);
+        databaseService.foodsInCafeteria(cafeteria);
 
     return Scaffold(
       appBar: AppBar(
@@ -83,6 +82,7 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
                 Tab(icon: Icon(Icons.home), text: 'Home'),
                 Tab(icon: Icon(Icons.person), text: 'Add Food'),
                 Tab(icon: Icon(Icons.food_bank_outlined), text: 'View Menu'),
+                Tab(icon: Icon(Icons.one_k_rounded), text: 'orders',),
                 Tab(
                     child: TextButton.icon(
                         onPressed: () async {
@@ -171,3 +171,5 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
     );
   }
 }
+
+

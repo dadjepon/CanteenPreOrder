@@ -2,6 +2,9 @@
 
 import 'package:canteen_preorderapp/presentation/profile_screen.dart';
 import 'package:canteen_preorderapp/presentation/view_all_users.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -183,6 +186,34 @@ void deleteUser(String email) async {
   }
 }
 
+void _showDeleteConfirmationDialog(BuildContext context, String email) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirm Deletion'),
+        content: const Text('Are you sure you want to delete this user?'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('No'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Yes'),
+            onPressed: () {
+              deleteUser(email); // Use the passed email
+              Navigator.of(context).pop(); // Close the confirmation dialog
+              Navigator.of(context).pop(); // Close the delete user dialog
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 void _showDeleteUserDialog(BuildContext context) {
   TextEditingController emailController = TextEditingController();
 
@@ -215,31 +246,6 @@ void _showDeleteUserDialog(BuildContext context) {
   );
 }
 
-void _showDeleteConfirmationDialog(BuildContext context, String email) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Confirm Deletion'),
-        content: const Text('Are you sure you want to delete this user?'),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('No'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: const Text('Yes'),
-            onPressed: () {
-              deleteUser(email); // Use the passed email
-              Navigator.of(context).pop(); // Close the confirmation dialog
-              Navigator.of(context).pop(); // Close the delete user dialog
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
 
+
+    }
