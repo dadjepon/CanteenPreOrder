@@ -40,8 +40,11 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/viewAllUsers', page: () => const UserListScreen()),
           GetPage(name: '/menu_update', page: () => AddFoodItemScreen()),
           GetPage(name: '/trackOrder', page: () => CurrentOrdersScreen()),
+          GetPage(name: '/view_staff_dashboard', page: () => ViewDashboardScreen()),
+          GetPage(name: '/view_order', page: () => OrdersPage()),
         ],
       );
     });
+
   }
 }
