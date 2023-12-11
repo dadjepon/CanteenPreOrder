@@ -63,7 +63,6 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    print(cafeteria);
     Stream<Iterable<MenuItem>> currStream =
         databaseService.foodsInCafeteria(cafeteria!);
 
