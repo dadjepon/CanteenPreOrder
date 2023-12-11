@@ -168,7 +168,7 @@ void _createNewUser(String name, String email, String instID,
   } catch (e) {
     print("Error: $e");
   }
-}
+
 
 void deleteUser(String email) async {
   try {
