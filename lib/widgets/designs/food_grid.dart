@@ -135,6 +135,33 @@ class _FoodGridScreenState extends State<FoodGridScreen> {
                                       "Ghc " + menuItem.price,
                                       style: theme.textTheme.titleLarge,
                                     ),
+
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 50.h),
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          if (menuItem.availabilityStatus ==
+                                              "Yes") {
+                                            _dataService.addToCart(
+                                                usedId: FirebaseAuthService()
+                                                    .currentUser!
+                                                    .id,
+                                                cafeteriaName:
+                                                    menuItem.cafeteria,
+                                                foodItemId:
+                                                    menuItem.menuItemId);
+
+                                            _dataService
+                                                .allCartItems(
+                                                    userId:
+                                                        FirebaseAuthService()
+                                                            .currentUser!
+                                                            .id,
+                                                    cafeteria:
+                                                        menuItem.cafeteria)
+                                                .length
+                                                .then(
+                                                    (value) => print("value"));
                                     widget.page != "StaffDashboard"
                                         ? Padding(
                                             padding:
