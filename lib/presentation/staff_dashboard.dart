@@ -63,7 +63,7 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
   @override
   Widget build(BuildContext context) {
     Stream<Iterable<MenuItem>> currStream =
-        databaseService.foodsInCafeteria(cafeteria!);
+        databaseService.foodsInCafeteria(cafeteria);
 
     return Scaffold(
       appBar: AppBar(
@@ -82,6 +82,7 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
                 Tab(icon: Icon(Icons.home), text: 'Home'),
                 Tab(icon: Icon(Icons.person), text: 'Add Food'),
                 Tab(icon: Icon(Icons.food_bank_outlined), text: 'View Menu'),
+                Tab(icon: Icon(Icons.one_k_rounded), text: 'orders',),
                 Tab(
                     child: TextButton.icon(
                         onPressed: () async {
