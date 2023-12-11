@@ -7,16 +7,22 @@ class CustomerItem {
   final String documentId;
   final String customerEmail;
   final String customerName;
+  final String customerPhoneNumber;
+  final String institutionId;
 
   const CustomerItem({
     required this.documentId,
     required this.customerEmail,
     required this.customerName,
+    required this.customerPhoneNumber,
+    required this.institutionId,
   });
 
   CustomerItem.fromSnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : documentId = snapshot.id,
         customerEmail = snapshot.data()[customerEmailField],
-        customerName = snapshot.data()[customerNameField];
+        customerName = snapshot.data()[customerNameField],
+        institutionId = snapshot.data()[institutionIdField],
+        customerPhoneNumber = snapshot.data()[customerPhoneNumberField];
 }

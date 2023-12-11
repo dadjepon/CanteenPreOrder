@@ -10,8 +10,19 @@ const String availabilityStatusField = "availabilityStatus";
 
 const String customerEmailField = "email";
 const String customerNameField = "name";
+const String institutionIdField = "instID";
+const String customerPhoneNumberField = "phoneNumber";
+
 const String munchiesField = "munchies";
 
 //Cart items
 const String foodItemIdField = "foodItemId";
 const String quantityField = "quantity";
+
+//Order items
+const String orderIdField = "orderId";
+const String paymentRefField = "paymentRef";
+const String amountField = "amount";
+const String orderCollectionField = "orderCollection";
+const String timestampField = "timestamp";
+const String orderStageField = "orderStage";
