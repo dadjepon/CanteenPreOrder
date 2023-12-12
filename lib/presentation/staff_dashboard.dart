@@ -2,38 +2,31 @@ import 'package:canteen_preorderapp/core/app_export.dart';
 import 'package:canteen_preorderapp/models/auth_service/firebase_service.dart';
 import 'package:canteen_preorderapp/models/database_service.dart';
 import 'package:canteen_preorderapp/models/menu_item.dart';
+import 'package:canteen_preorderapp/models/order_item.dart';
 import 'package:canteen_preorderapp/widgets/custom_dialogs/show_logout_dialog.dart';
 import 'package:canteen_preorderapp/widgets/designs/food_grid.dart';
 import 'package:flutter/material.dart';
-import '../models/auth_service/auth_controller.dart';
-import 'package:get/get.dart';
-
 
 class StaffDashboardScreen extends StatefulWidget {
   StaffDashboardScreen({Key? key}) : super(key: key);
+
   final AuthController authController = Get.find<AuthController>();
+
   @override
   _FoodAppHomeState createState() => _FoodAppHomeState();
 }
 
-class _FoodAppHomeState extends State<StaffDashboardScreen>
-    with SingleTickerProviderStateMixin {
+class _FoodAppHomeState extends State<StaffDashboardScreen> with SingleTickerProviderStateMixin {
   late final TabController _tabController;
-  final List<String> _filterOptions = [
-    'All',
-    'Processed',
-    'Processing',
-    'Done'
-  ];
+  final List<String> _filterOptions = ['To be Processed', 'Processing', 'Processed', 'Done'];
   String cafeteria = "";
   late final DatabaseService databaseService;
-  String _selectedFilter = 'All';
-  late final DatabaseService _dataService;
+  int _selectedFilter = 1;
+  int _activeIndex = 0;
 
   @override
   void initState() {
     databaseService = DatabaseService();
-    // _dataService = DatabaseService();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       setState(() {
@@ -42,6 +35,7 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
       });
     });
     getCafeteria();
+    super.initState();
   }
 
   @override
@@ -51,25 +45,22 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
   }
 
   void getCafeteria() async {
-    var staffItem = await databaseService.getStaff(
-        userId: FirebaseAuthService().currentUser!.id);
+    var staffItem = await databaseService.getStaff(userId: FirebaseAuthService().currentUser!.id);
     setState(() {
       cafeteria = staffItem.cafeteria;
     });
   }
 
-  int _activeIndex = 0;
-
   @override
   Widget build(BuildContext context) {
-    Stream<Iterable<MenuItem>> currStream =
-        databaseService.foodsInCafeteria(cafeteria);
+    Stream<Iterable<MenuItem>> currStream = databaseService.foodsInCafeteria(cafeteria);
+    Stream<Iterable<OrderItem>> ordersCurrStream = databaseService.foodOrdersByStage(cafeteria, _selectedFilter.toString());
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF6B0808), // AppBar's custom background color
-        bottom: new PreferredSize(
-          preferredSize: new Size(24.0, 24.0),
+        backgroundColor: Color(0xFF6B0808),
+        bottom: PreferredSize(
+          preferredSize: Size(24.0, 24.0),
           child: Container(
             height: 80.0,
             child: TabBar(
@@ -82,26 +73,20 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
                 Tab(icon: Icon(Icons.home), text: 'Home'),
                 Tab(icon: Icon(Icons.person), text: 'Add Food'),
                 Tab(icon: Icon(Icons.food_bank_outlined), text: 'View Menu'),
-                Tab(icon: Icon(Icons.one_k_rounded), text: 'orders',),
+                Tab(icon: Icon(Icons.one_k_rounded), text: 'Orders'),
                 Tab(
-                    child: TextButton.icon(
-                        onPressed: () async {
-                          final shouldLogout = await showLogOutDialog(context);
-
-                          if (shouldLogout) {
-                            await FirebaseAuthService().logOut();
-
-                            Get.toNamed("/login");
-                          }
-                        },
-                        icon: Icon(
-                          Icons.logout,
-                          color: Colors.white54,
-                        ),
-                        label: Text(
-                          "Log Out",
-                          style: TextStyle(color: Colors.white54),
-                        ))),
+                  child: TextButton.icon(
+                    onPressed: () async {
+                      final shouldLogout = await showLogOutDialog(context);
+                      if (shouldLogout) {
+                        await FirebaseAuthService().logOut();
+                        Get.toNamed("/login");
+                      }
+                    },
+                    icon: Icon(Icons.logout, color: Colors.white54),
+                    label: Text("Log Out", style: TextStyle(color: Colors.white54)),
+                  ),
+                ),
               ],
             ),
           ),
@@ -114,14 +99,15 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
                   padding: const EdgeInsets.all(16.0),
                   child: TextField(
                     decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        hintText: 'Search',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey[300]),
+                      prefixIcon: Icon(Icons.search),
+                      hintText: 'Search',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[300],
+                    ),
                   ),
                 )
               : Text(""),
@@ -130,39 +116,41 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
                   height: 40,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: _filterOptions.map((filter) {
+                    children: _filterOptions.asMap().entries.map((entry) {
+                      int index = entry.key + 1;
+                      String filter = entry.value;
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: ChoiceChip(
-                          labelStyle: _selectedFilter == filter
-                              ? TextStyle(color: Colors.white)
-                              : null,
+                          labelStyle: _selectedFilter == index ? TextStyle(color: Colors.white) : null,
                           selectedColor: Color(0xFF6B0808),
                           backgroundColor: Colors.grey[300],
                           label: Text(filter),
-                          selected: _selectedFilter == filter,
+                          selected: _selectedFilter == index,
                           onSelected: (bool selected) {
                             setState(() {
-                              _selectedFilter = filter;
+                              _selectedFilter = index;
+                              ordersCurrStream = databaseService.foodOrdersByStage(cafeteria, _selectedFilter.toString());
                             });
                           },
                         ),
                       );
-
                     }).toList(),
-                  ))
+                  ),
+                )
               : Text(""),
-
           Expanded(
             child: TabBarView(
               controller: _tabController,
               children: [
-                Text("All Orders Placed"),
+                OrdersList(currStage: ordersCurrStream), // Modify this to display filtered orders based on _selectedFilter
                 AddFoodItemScreen(),
                 FoodGridScreen(
                   currStream: currStream,
                   page: "StaffDashboard",
                 ),
+                OrdersList(currStage: ordersCurrStream), // Pass _selectedFilter to OrdersList
+                // Other widgets...
               ],
             ),
           ),
@@ -172,4 +160,4 @@ class _FoodAppHomeState extends State<StaffDashboardScreen>
   }
 }
 
-
+// Make sure to update OrdersList widget to use the selectedFilter for filtering orders.
