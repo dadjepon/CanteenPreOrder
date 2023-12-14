@@ -8,15 +8,14 @@ import 'package:google_fonts/google_fonts.dart';
 // ignore_for_file: must_be_immutable
 class SfProfileScreen extends StatefulWidget {
   SfProfileScreen({Key? key}) : super(key: key);
-
   @override
   State<SfProfileScreen> createState() => _SfProfileScreenState();
 }
 
 class _SfProfileScreenState extends State<SfProfileScreen> {
   TextEditingController emailController = TextEditingController();
-
   TextEditingController nameController = TextEditingController();
+  TextEditingController roleController = TextEditingController();
 
   late final DatabaseService _dataService;
 
@@ -26,9 +25,11 @@ class _SfProfileScreenState extends State<SfProfileScreen> {
     super.initState();
   }
 
+  var priv = "admin";
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
+
     return Scaffold(
         resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
@@ -45,10 +46,14 @@ class _SfProfileScreenState extends State<SfProfileScreen> {
                     if (snapshot.hasData) {
                       final CustomerItem profileData =
                           snapshot.data as CustomerItem;
+
                       nameController.text = profileData.customerName;
+
                       emailController.text = profileData.customerEmail;
+                      roleController.text = profileData.role;
+
                       return SizedBox(
-                        height: 1000,
+                        height: 500,
                         child: Expanded(
                           child: Container(
                             color: Colors.white54,
@@ -91,7 +96,7 @@ class _SfProfileScreenState extends State<SfProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "Address: Loreum Ipsum\n           Address line 2",
+                                      profileData.customerPhoneNumber,
                                       style: GoogleFonts.ubuntu(fontSize: 20),
                                     )
                                   ],
@@ -103,81 +108,71 @@ class _SfProfileScreenState extends State<SfProfileScreen> {
                                   child: Expanded(
                                       child: ListView(
                                     children: [
-                                      Card(
-                                        margin: const EdgeInsets.only(
-                                            left: 35, right: 35, bottom: 10),
-                                        color: Colors.white70,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30)),
-                                        child: ListTile(
-                                          leading: Icon(
-                                            Icons.privacy_tip_sharp,
-                                            color: Color(0xFF6B0808),
-                                          ),
-                                          title: Text(
-                                            'Track Order',
-                                            style: GoogleFonts.ubuntu(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          trailing: Icon(
-                                            Icons.arrow_forward_ios_outlined,
-                                            color: Color(0xFF6B0808),
-                                          ),
-                                        ),
-                                      ),
                                       const SizedBox(
                                         height: 10,
                                       ),
-                                      Card(
-                                        color: Colors.white70,
-                                        margin: const EdgeInsets.only(
-                                            left: 35, right: 35, bottom: 10),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30)),
-                                        child: ListTile(
-                                          leading: Icon(Icons.history,
-                                              color: Color(0xFF6B0808)),
-                                          title: Text(
-                                            'Purchase History',
-                                            style: GoogleFonts.ubuntu(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          trailing: Icon(
-                                            Icons.arrow_forward_ios_outlined,
-                                            color: Color(0xFF6B0808),
-                                          ),
-                                        ),
-                                      ),
+                                      profileData.role != priv
+                                          ? Card(
+                                              color: Colors.white70,
+                                              margin: const EdgeInsets.only(
+                                                  left: 35,
+                                                  right: 35,
+                                                  bottom: 10),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30)),
+                                              child: ListTile(
+                                                leading: Icon(Icons.history,
+                                                    color: Color(0xFF6B0808)),
+                                                title: Text(
+                                                  'Purchase History',
+                                                  style: GoogleFonts.ubuntu(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                trailing: Icon(
+                                                  Icons
+                                                      .arrow_forward_ios_outlined,
+                                                  color: Color(0xFF6B0808),
+                                                ),
+                                              ),
+                                            )
+                                          : Text(""),
                                       const SizedBox(
                                         height: 10,
                                       ),
-                                      Card(
-                                        color: Colors.white70,
-                                        margin: const EdgeInsets.only(
-                                            left: 35, right: 35, bottom: 10),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30)),
-                                        child: ListTile(
-                                          leading: Icon(
-                                            Icons.privacy_tip_sharp,
-                                            color: Color(0xFF6B0808),
-                                          ),
-                                          title: Text(
-                                            'Payment Details',
-                                            style: GoogleFonts.ubuntu(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          trailing: Icon(
-                                              Icons.arrow_forward_ios_outlined,
-                                              color: Color(0xFF6B0808)),
-                                        ),
-                                      ),
+                                      profileData.role != priv
+                                          ? Card(
+                                              color: Colors.white70,
+                                              margin: const EdgeInsets.only(
+                                                  left: 35,
+                                                  right: 35,
+                                                  bottom: 10),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30)),
+                                              child: ListTile(
+                                                leading: Icon(
+                                                  Icons.privacy_tip_sharp,
+                                                  color: Color(0xFF6B0808),
+                                                ),
+                                                title: Text(
+                                                  'Payment Details',
+                                                  style: GoogleFonts.ubuntu(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                trailing: Icon(
+                                                    Icons
+                                                        .arrow_forward_ios_outlined,
+                                                    color: Color(0xFF6B0808)),
+                                              ),
+                                            )
+                                          : Text(""),
                                       const SizedBox(
                                         height: 10,
                                       ),
@@ -210,9 +205,11 @@ class _SfProfileScreenState extends State<SfProfileScreen> {
                                         onTap: () async {
                                           final shouldLogout =
                                               await showLogOutDialog(context);
+
                                           if (shouldLogout) {
                                             await FirebaseAuthService()
                                                 .logOut();
+
                                             Get.toNamed("/login");
                                           }
                                         },
@@ -252,8 +249,10 @@ class _SfProfileScreenState extends State<SfProfileScreen> {
                     } else {
                       return const CircularProgressIndicator();
                     }
+
                   default:
                     debugPrint('default');
+
                     return const CircularProgressIndicator();
                 }
               },
@@ -263,6 +262,7 @@ class _SfProfileScreenState extends State<SfProfileScreen> {
   }
 
   /// Navigates back to the previous screen.
+
   onTapArrowLeft(BuildContext context) {
     Navigator.pop(context);
   }

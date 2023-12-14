@@ -47,8 +47,19 @@ dependencies:
   cached_network_image: ^3.2.3
   flutter_svg: ^1.1.6
   flutter_staggered_grid_view: ^0.4.1
+
+  sizer: ^2.0.15
+  webview_flutter: ^4.2.2
+  url_launcher: ^6.0.9
+  webview_flutter_web: ^0.2.2+3
+  webview_flutter_platform_interface: ^2.8.0
+  order_tracker: ^0.0.2
+  badges: ^3.1.2
+  timelines: ^0.1.0
+  font_awesome_flutter: ^10.6.0
   http: ^0.13.3
   fl_chart: ^0.65.0
+
 
 
 dev_dependencies:

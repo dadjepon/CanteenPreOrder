@@ -1,6 +1,7 @@
 # Flutter-related
 **/Flutter/ephemeral/
 **/Pods/
+*.lock
 
 # Xcode-related
 **/dgph
