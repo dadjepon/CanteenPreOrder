@@ -211,18 +211,19 @@ class DatabaseService {
   }
 
   Future<void> removeFromMenu(String foodItemId) async {
-    final menuCollection = FirebaseFirestore.instance
-        .collection('menuCollection');
+    final menuCollection =
+        FirebaseFirestore.instance.collection('menuCollection');
     // Check if the item already exists in the cart
-    var existingMenuItem =
-        await menuCollection.where(FieldPath.documentId, isEqualTo: foodItemId).get();
+    var existingMenuItem = await menuCollection
+        .where(FieldPath.documentId, isEqualTo: foodItemId)
+        .get();
 
     if (existingMenuItem.docs.isEmpty) {
       return;
     } else {
       // If the item is already in the cart, update the quantity
       var MenuItem = existingMenuItem.docs.first;
-    MenuItem.reference.delete();
+      MenuItem.reference.delete();
     }
   }
 
