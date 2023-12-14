@@ -336,6 +336,15 @@ class _UserListScreenState extends State<UserListScreen> {
                             );
                           } else {
                             try {
+                              _createNewUser(
+                                  nameController.text,
+                                  emailController.text,
+                                  phoneNumberController.text,
+                                  instIDController.text,
+                                  passwordController.text,
+                                  cafeteriaController.text,
+                                  roleController.text);
+
                               final snackbar = SnackBar(
                                 duration: const Duration(seconds: 5),
                                 content: Text(
@@ -371,6 +380,7 @@ class _UserListScreenState extends State<UserListScreen> {
                               );
                             }
                           }
+                          Navigator.of(context).pop();
                         },
                       ),
                     ),
@@ -384,27 +394,14 @@ class _UserListScreenState extends State<UserListScreen> {
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(
-              child: const Text('Create'),
-              onPressed: () {
-                _createNewUser(
-                    nameController.text,
-                    emailController.text,
-                    phoneNumberController.text,
-                    instIDController.text,
-                    passwordController.text,
-                    roleController.text);
-                Navigator.of(context).pop();
-              },
-            ),
           ],
         );
       },
     );
   }
 
-  _createNewUser(String name, String email, String instID, String phoneNumber,
-      String password, String role) async {
+  _createNewUser(String name, String email, String cafeteria, String instID,
+      String phoneNumber, String password, String role) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -422,8 +419,9 @@ class _UserListScreenState extends State<UserListScreen> {
             .set({
           'name': name,
           'email': email,
-          '': email,
+          'instID': instID,
           'role': role,
+          'cafeteria': cafeteria,
           'requiresPasswordChange': true, // Flag for mandatory password change
         });
 

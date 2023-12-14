@@ -35,6 +35,12 @@ class DatabaseService {
           .snapshots()
           .map((event) => event.docs.map((doc) => MenuItem.fromSnapshot(doc)));
 
+  Stream<Iterable<OrderItem>> foodOrdersByStage(String cafeteriaName, String stage) =>
+    canteenOrdersCollection.doc('canteenOrders').collection(cafeteriaName)
+        .where('orderStage', isEqualTo: stage)
+        .snapshots()
+        .map((event) => event.docs.map((doc) => OrderItem.fromSnapshot(doc)));
+
   Stream<Iterable<CartItem>> allCartItems(
       {required String userId, required String cafeteria}) {
     final cartCollection = FirebaseFirestore.instance
@@ -204,6 +210,43 @@ class DatabaseService {
       cartItem.reference.update({'quantity': newQuantity});
     }
   }
+
+
+// Future<void> updateOrderStage(
+//       {required String orderItemId,
+//       required String cafeteriaName,}) async {
+//     final orderCollection = FirebaseFirestore.instance
+//         .collection('cartCollection')
+//         .doc(usedId)
+//         .collection(cafeteriaName);
+//     // Check if the item already exists in the cart
+//     var existingCartItem =
+//         await cartCollection.where('foodItemId', isEqualTo: foodItemId).get();
+
+//     var foodItem = await getMenuItem(foodID: foodItemId);
+
+//     if (existingCartItem.docs.isEmpty) {
+//       // If the item is not in the cart, add it
+//       await cartCollection.add({
+//         'foodItemId': foodItemId,
+//         'quantity': 1,
+//         'foodName': foodItem.foodName,
+//         'foodImage': foodItem.foodImage,
+//         'price': foodItem.price,
+//         'foodDescription': foodItem.foodDescription,
+//         'cafeteria': foodItem.cafeteria,
+//       });
+//     } else {
+//       // If the item is already in the cart, update the quantity
+//       var cartItem = existingCartItem.docs.first;
+//       int newQuantity = cartItem['quantity'] + 1;
+//       cartItem.reference.update({'quantity': newQuantity});
+//     }
+//   }
+
+
+
+
 
   Future<void> removeFromCart({
     required String foodItemId,
