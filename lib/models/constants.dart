@@ -27,3 +27,5 @@ const String amountField = "amount";
 const String orderCollectionField = "orderCollection";
 const String timestampField = "timestamp";
 const String orderStageField = "orderStage";
+const String deliveryOptionField = "deliveryOption";
+const String locationField = "location";

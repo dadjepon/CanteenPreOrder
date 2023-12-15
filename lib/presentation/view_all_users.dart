@@ -336,17 +336,14 @@ class _UserListScreenState extends State<UserListScreen> {
                             );
                           } else {
                             try {
-                              final snackbar = SnackBar(
-                                duration: const Duration(seconds: 5),
-                                content: Text(
-                                  'Almost done, Please wait...',
-                                  style: GoogleFonts.ubuntu(
-                                    color: Color.fromARGB(255, 105, 4, 4),
-                                  ),
-                                ),
-                                backgroundColor: Colors.white,
-                                elevation: 5,
-                              );
+                              _createNewUser(
+                                  name: nameController.text,
+                                  email: emailController.text,
+                                  phoneNumber: phoneNumberController.text,
+                                  instID: instIDController.text,
+                                  password: passwordController.text,
+                                  cafeteria: cafeteriaController.text,
+                                  role: roleController.text);
                             } on WeakPasswordAuthException {
                               await showErrorDialog(
                                 context,
@@ -371,6 +368,7 @@ class _UserListScreenState extends State<UserListScreen> {
                               );
                             }
                           }
+                          Navigator.of(context).pop();
                         },
                       ),
                     ),
@@ -384,27 +382,20 @@ class _UserListScreenState extends State<UserListScreen> {
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(
-              child: const Text('Create'),
-              onPressed: () {
-                _createNewUser(
-                    nameController.text,
-                    emailController.text,
-                    phoneNumberController.text,
-                    instIDController.text,
-                    passwordController.text,
-                    roleController.text);
-                Navigator.of(context).pop();
-              },
-            ),
           ],
         );
       },
     );
   }
 
-  _createNewUser(String name, String email, String instID, String phoneNumber,
-      String password, String role) async {
+  _createNewUser(
+      {required String name,
+      required String email,
+      required String cafeteria,
+      required String instID,
+      required String phoneNumber,
+      required String password,
+      required String role}) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -422,8 +413,9 @@ class _UserListScreenState extends State<UserListScreen> {
             .set({
           'name': name,
           'email': email,
-          '': email,
+          'instID': instID,
           'role': role,
+          'cafeteria': cafeteria,
           'requiresPasswordChange': true, // Flag for mandatory password change
         });
 

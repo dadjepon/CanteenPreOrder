@@ -1,6 +1,6 @@
 import 'package:canteen_preorderapp/core/app_export.dart';
 import 'package:canteen_preorderapp/models/auth_service/firebase_service.dart';
-import 'package:canteen_preorderapp/models/menu_item.dart' as MenuModel; // Use 'as' to rename the import
+import 'package:canteen_preorderapp/models/menu_item.dart'; // Use 'as' to rename the import
 import 'package:canteen_preorderapp/models/database_service.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +9,7 @@ class FoodGridScreen extends StatefulWidget {
   const FoodGridScreen(
       {super.key, required this.currStream, required this.page});
 
-  final Stream<Iterable<MenuModel.MenuItem>> currStream; // Use the renamed import here
+  final Stream<Iterable<MenuItem>> currStream; // Use the renamed import here
   final String page;
 
   @override
@@ -27,190 +27,255 @@ class _FoodGridScreenState extends State<FoodGridScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: widget.currStream,
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.active:
-            if (snapshot.hasData) {
-              final allFoods = snapshot.data as Iterable<MenuModel.MenuItem>;
+    return SingleChildScrollView(
+      child: StreamBuilder(
+        stream: widget.currStream,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.active:
+              if (snapshot.hasData) {
+                final allFoods = snapshot.data as Iterable<MenuItem>;
 
-              return Expanded(
-                child: StaggeredGridView.countBuilder(
-                  shrinkWrap: true,
-                  primary: false,
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 7.53.h,
-                  mainAxisSpacing: 7.53.h,
-                  staggeredTileBuilder: (index) {
-                    return StaggeredTile.fit(1);
-                  },
-                  itemCount: allFoods.length,
-                  itemBuilder: (context, index) {
-                    final menuItem = allFoods.elementAt(index);
-                    // Example food name
-                    return Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 4.h,
-                        vertical: 4.v,
-                      ),
-                      decoration: AppDecoration.outlineOnErrorContainer1.copyWith(
-                        borderRadius: BorderRadiusStyle.roundedBorder11,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 9.v),
-                          Center(
-                            child: Text(
-                              menuItem.cafeteria,
-                              style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0XFFE78F0B),
-                              ),
-                            ),
+                return StaggeredGridView.countBuilder(
+                    shrinkWrap: true,
+                    primary: false,
+                    crossAxisCount: 4,
+                    crossAxisSpacing: 7.53.h,
+                    mainAxisSpacing: 7.53.h,
+                    staggeredTileBuilder: (index) {
+                      return StaggeredTile.fit(1);
+                    },
+                    itemCount: allFoods.length,
+                    itemBuilder: (context, index) {
+                      final menuItem = allFoods.elementAt(index);
+                      // Example food name
+                      return GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: SizedBox(
+                                  width:
+                                      0.5 * MediaQuery.of(context).size.width,
+                                  height:
+                                      0.25 * MediaQuery.of(context).size.height,
+                                  child: Column(
+                                    children: [
+                                      CustomImageView(
+                                        imagePath: menuItem.foodImage,
+                                        height: 0.2 *
+                                            MediaQuery.of(context).size.height,
+                                      ),
+                                      Center(
+                                          child: Text(
+                                              'Food Description: ${menuItem.foodDescription}')),
+                                    ],
+                                  ),
+                                ),
+                                contentPadding: const EdgeInsets.all(10),
+                                title: Row(
+                                  children: [
+                                    Text(
+                                        '${menuItem.foodName} from ${menuItem.cafeteria}'),
+                                    Spacer(),
+                                    Text('GHS ${menuItem.price}'),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text('Close'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 4.h,
+                            vertical: 4.v,
                           ),
-                          SizedBox(height: 9.v),
-                          CustomImageView(
-                            imagePath: menuItem.foodImage,
-                            height: 160.v,
-                            width: 166.h,
-                            radius: BorderRadius.circular(
-                              5.h,
-                            ),
-                            margin: EdgeInsets.only(left: 2.h),
+                          decoration:
+                              AppDecoration.outlineOnErrorContainer1.copyWith(
+                            borderRadius: BorderRadiusStyle.roundedBorder11,
                           ),
-                          SizedBox(height: 9.v),
-                          Row(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(height: 9.v),
+                              Center(
+                                child: Text(
+                                  menuItem.cafeteria,
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0XFFE78F0B)),
+                                ),
+                              ),
+                              SizedBox(height: 9.v),
+                              CustomImageView(
+                                imagePath: menuItem.foodImage,
+                                height: 160.v,
+                                width: 166.h,
+                                radius: BorderRadius.circular(
+                                  5.h,
+                                ),
+                                margin: EdgeInsets.only(left: 2.h),
+                              ),
+                              SizedBox(height: 9.v),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 1.h),
+                                    child: Text(
+                                      menuItem.foodName +
+                                          " (" +
+                                          menuItem.menuType +
+                                          ")",
+                                      style: CustomTextStyles
+                                          .titleSmallPoppinsWhiteA700,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 50.h),
+                                    child: IconButton(
+                                      onPressed: () {},
+                                      icon: menuItem.availabilityStatus == "Yes"
+                                          ? Icon(
+                                              Icons.check_circle,
+                                              color: Colors.green,
+                                            )
+                                          : Icon(
+                                              Icons.cancel,
+                                              color: Colors.red[50],
+                                            ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 9.v),
                               Padding(
                                 padding: EdgeInsets.only(left: 1.h),
                                 child: Text(
-                                  menuItem.foodName +
-                                      " (" +
-                                      menuItem.menuType +
-                                      ")",
-                                  style: CustomTextStyles.titleSmallPoppinsWhiteA700,
+                                  menuItem.foodDescription.length > 20
+                                      ? menuItem.foodDescription.substring(0,
+                                          menuItem.foodDescription.length - 20)
+                                      : menuItem.foodDescription,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: theme.textTheme.bodySmall,
                                 ),
                               ),
+                              SizedBox(height: 10.v),
                               Padding(
-                                padding: EdgeInsets.only(left: 50.h),
-                                child: IconButton(
-                                  onPressed: () {},
-                                  icon: menuItem.availabilityStatus == "Yes"
-                                      ? Icon(
-                                          Icons.check_circle,
-                                          color: Colors.green,
-                                        )
-                                      : Icon(
-                                          Icons.cancel,
-                                          color: Colors.red[50],
-                                        ),
+                                padding: EdgeInsets.only(left: 1.h),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Ghc " + menuItem.price,
+                                      style: theme.textTheme.titleLarge,
+                                    ),
+                                    widget.page != "StaffDashboard"
+                                        ? Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 50.h),
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                if (menuItem
+                                                        .availabilityStatus ==
+                                                    "Yes") {
+                                                  _dataService.addToCart(
+                                                      usedId:
+                                                          FirebaseAuthService()
+                                                              .currentUser!
+                                                              .id,
+                                                      cafeteriaName:
+                                                          menuItem.cafeteria,
+                                                      foodItemId:
+                                                          menuItem.menuItemId);
+
+                                                  _dataService
+                                                      .allCartItems(
+                                                          userId:
+                                                              FirebaseAuthService()
+                                                                  .currentUser!
+                                                                  .id,
+                                                          cafeteria: menuItem
+                                                              .cafeteria)
+                                                      .length
+                                                      .then((value) =>
+                                                          print("value"));
+
+                                                  final snackbar = SnackBar(
+                                                    // duration: const Duration(seconds: 5),
+                                                    content: Text(
+                                                      'Item successfully added to cart',
+                                                      style: GoogleFonts.ubuntu(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    backgroundColor:
+                                                        Color.fromARGB(
+                                                            255, 105, 4, 4),
+                                                    elevation: 5,
+                                                  );
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackbar);
+                                                } else {
+                                                  final snackbar = SnackBar(
+                                                    // duration: const Duration(seconds: 5),
+                                                    content: Text(
+                                                      'Sorry, the food is finished.',
+                                                      style: GoogleFonts.ubuntu(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    backgroundColor:
+                                                        Color.fromARGB(
+                                                            255, 105, 4, 4),
+                                                    elevation: 5,
+                                                  );
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackbar);
+                                                }
+                                              },
+                                              child: Text("Buy"),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 40.h),
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                _dataService.removeFromMenu(
+                                                    menuItem.menuItemId);
+                                              },
+                                              child: Text("Delete"),
+                                            )),
+                                  ],
                                 ),
                               ),
+                              SizedBox(height: 10.v),
                             ],
                           ),
-                          SizedBox(height: 9.v),
-                          Padding(
-                            padding: EdgeInsets.only(left: 1.h),
-                            child: Text(
-                              menuItem.foodDescription.length > 20
-                                  ? menuItem.foodDescription.substring(0, menuItem.foodDescription.length - 20)
-                                  : menuItem.foodDescription,
-                              maxLines: 2,
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.bodySmall,
-                            ),
-                          ),
-                          SizedBox(height: 10.v),
-                          Padding(
-                            padding: EdgeInsets.only(left: 1.h),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Ghc " + menuItem.price,
-                                  style: theme.textTheme.titleLarge,
-                                ),
-                                widget.page != "StaffDashboard"
-                                    ? Padding(
-                                        padding: EdgeInsets.only(left: 50.h),
-                                        child: ElevatedButton(
-                                          onPressed: () async {
-                                            if (menuItem.availabilityStatus == "Yes") {
-                                              _dataService.addToCart(
-                                                usedId: FirebaseAuthService().currentUser!.id,
-                                                cafeteriaName: menuItem.cafeteria,
-                                                foodItemId: menuItem.menuItemId,
-                                              );
-
-                                              _dataService
-                                                  .allCartItems(
-                                                    userId: FirebaseAuthService().currentUser!.id,
-                                                    cafeteria: menuItem.cafeteria,
-                                                  )
-                                                  .length
-                                                  .then((value) => print("value"));
-
-                                              final snackbar = SnackBar(
-                                                content: Text(
-                                                  'Item successfully added to cart',
-                                                  style: GoogleFonts.ubuntu(
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                                backgroundColor: Color.fromARGB(255, 105, 4, 4),
-                                                elevation: 5,
-                                              );
-                                              ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                                            } else {
-                                              final snackbar = SnackBar(
-                                                content: Text(
-                                                  'Sorry, the food is finished.',
-                                                  style: GoogleFonts.ubuntu(
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                                backgroundColor: Color.fromARGB(255, 105, 4, 4),
-                                                elevation: 5,
-                                              );
-                                              ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                                            }
-                                          },
-                                          child: Text("Buy"),
-                                        ),
-                                      )
-                                    : Padding(
-                                        padding: EdgeInsets.only(left: 50.h),
-                                        child: ElevatedButton(
-                                          onPressed: () async {
-                                            _dataService.removeFromMenu(menuItem.menuItemId);
-                                          },
-                                          child: Text("Delete"),
-                                        ),
-                                      ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10.v),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              );
-            } else {
+                        ),
+                      );
+                    });
+              } else {
+                // showLoadingDialog(context: context, text: "Please wait");
+                debugPrint("Active, no data");
+                return const CircularProgressIndicator();
+              }
+            default:
               // showLoadingDialog(context: context, text: "Please wait");
-              debugPrint("Active, no data");
+              debugPrint("Not active");
               return const CircularProgressIndicator();
-            }
-          default:
-            // showLoadingDialog(context: context, text: "Please wait");
-            debugPrint("Not active");
-            return const CircularProgressIndicator();
-        }
-      },
+          }
+        },
+      ),
     );
   }
 }
