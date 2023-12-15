@@ -12,6 +12,8 @@ class OrderItem {
   final String email;
   final String cafeteria;
   final String docId;
+  final String deliveryOption;
+  final String location;
 
   const OrderItem({
     required this.orderId,
@@ -22,6 +24,8 @@ class OrderItem {
     required this.email,
     required this.cafeteria,
     required this.docId,
+    required this.deliveryOption,
+    required this.location,
   });
 
   OrderItem.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -32,5 +36,8 @@ class OrderItem {
         timestamp = snapshot.data()[timestampField],
         orderStage = snapshot.data()[orderStageField],
         email = snapshot.data()[customerEmailField],
-        cafeteria = snapshot.data()[cafeteriaField];
+        cafeteria = snapshot.data()[cafeteriaField],
+        location = snapshot.data()[locationField],
+        deliveryOption = snapshot.data()[deliveryOptionField];
+        
 }
