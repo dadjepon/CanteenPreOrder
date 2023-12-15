@@ -185,15 +185,22 @@ class OrderCard extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        var ordersArray = [];
+        for (int i = 0; i < orderItem.orderComponents.length; i++) {
+            ordersArray.add("${orderItem.orderComponents[i]['quantity']} - ${orderItem.orderComponents[i]['foodName']}");
+        }
         return AlertDialog(
           title: Text('Additional Information'),
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Person Name: ${orderItem.orderId}'),
-              Text('Person Email: ${orderItem.email}'),
-              Text('Person Phone Number: ${orderItem.timestamp}'),
+              Text('Order ID: ${orderItem.orderId}'),
+              Text('Email: ${orderItem.email}'),
+              Text('Time: ${orderItem.timestamp}'),
+              Text('Delivery option: ${orderItem.deliveryOption}'),
+              Text('Delivery option: ${orderItem.location}'),
+              Text('Order Items: ${ordersArray}'),
             ],
           ),
           actions: [
