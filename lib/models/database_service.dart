@@ -60,7 +60,10 @@ class DatabaseService {
       required String amount,
       required String orderStage,
       required String timestamp,
-      required String cafeteria}) async {
+      required String cafeteria,
+      required String email,
+      required String delivery,
+      required String location}) async {
     final cartCollection = FirebaseFirestore.instance
         .collection('cartCollection')
         .doc(userId)
@@ -75,6 +78,10 @@ class DatabaseService {
       'orderCollection': allData,
       'timestamp': timestamp,
       'orderStage': orderStage,
+      'email': email,
+      'userId': userId,
+      'deliveryOption': delivery,
+      'location': location
     });
     final instance = FirebaseFirestore.instance;
     final batch = instance.batch();
@@ -93,6 +100,11 @@ class DatabaseService {
       'orderCollection': allData,
       'timestamp': timestamp,
       'orderStage': orderStage,
+      'email': email,
+      'userId': userId,
+      'cafeteria': cafeteria,
+      'deliveryOption': delivery,
+      'location': location
     });
   }
 
@@ -234,18 +246,19 @@ class DatabaseService {
   }
 
   Future<void> removeFromMenu(String foodItemId) async {
-    final menuCollection = FirebaseFirestore.instance
-        .collection('menuCollection');
+    final menuCollection =
+        FirebaseFirestore.instance.collection('menuCollection');
     // Check if the item already exists in the cart
-    var existingMenuItem =
-        await menuCollection.where(FieldPath.documentId, isEqualTo: foodItemId).get();
+    var existingMenuItem = await menuCollection
+        .where(FieldPath.documentId, isEqualTo: foodItemId)
+        .get();
 
     if (existingMenuItem.docs.isEmpty) {
       return;
     } else {
       // If the item is already in the cart, update the quantity
       var MenuItem = existingMenuItem.docs.first;
-    MenuItem.reference.delete();
+      MenuItem.reference.delete();
     }
   }
 

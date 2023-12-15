@@ -27,29 +27,72 @@ class _FoodGridScreenState extends State<FoodGridScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: widget.currStream,
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.active:
-            if (snapshot.hasData) {
-              final allFoods = snapshot.data as Iterable<MenuItem>;
+    return SingleChildScrollView(
+      child: StreamBuilder(
+        stream: widget.currStream,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.active:
+              if (snapshot.hasData) {
+                final allFoods = snapshot.data as Iterable<MenuItem>;
 
-              return Expanded(
-                  child: StaggeredGridView.countBuilder(
-                      shrinkWrap: true,
-                      primary: false,
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 7.53.h,
-                      mainAxisSpacing: 7.53.h,
-                      staggeredTileBuilder: (index) {
-                        return StaggeredTile.fit(1);
-                      },
-                      itemCount: allFoods.length,
-                      itemBuilder: (context, index) {
-                        final menuItem = allFoods.elementAt(index);
-                        // Example food name
-                        return Container(
+                return StaggeredGridView.countBuilder(
+                    shrinkWrap: true,
+                    primary: false,
+                    crossAxisCount: 4,
+                    crossAxisSpacing: 7.53.h,
+                    mainAxisSpacing: 7.53.h,
+                    staggeredTileBuilder: (index) {
+                      return StaggeredTile.fit(1);
+                    },
+                    itemCount: allFoods.length,
+                    itemBuilder: (context, index) {
+                      final menuItem = allFoods.elementAt(index);
+                      // Example food name
+                      return GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: SizedBox(
+                                  width:
+                                      0.5 * MediaQuery.of(context).size.width,
+                                  height:
+                                      0.25 * MediaQuery.of(context).size.height,
+                                  child: Column(
+                                    children: [
+                                      CustomImageView(
+                                        imagePath: menuItem.foodImage,
+                                        height: 0.2 *
+                                            MediaQuery.of(context).size.height,
+                                      ),
+                                      Center(
+                                          child: Text(
+                                              'Food Description: ${menuItem.foodDescription}')),
+                                    ],
+                                  ),
+                                ),
+                                contentPadding: const EdgeInsets.all(10),
+                                title: Row(
+                                  children: [
+                                    Text(
+                                        '${menuItem.foodName} from ${menuItem.cafeteria}'),
+                                    Spacer(),
+                                    Text('GHS ${menuItem.price}'),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text('Close'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
                           padding: EdgeInsets.symmetric(
                             horizontal: 4.h,
                             vertical: 4.v,
@@ -136,34 +179,35 @@ class _FoodGridScreenState extends State<FoodGridScreen> {
                                       style: theme.textTheme.titleLarge,
                                     ),
                                     widget.page != "StaffDashboard"
-                                        ?
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 50.h),
-                                      
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          if (menuItem.availabilityStatus ==
-                                              "Yes") {
-                                            _dataService.addToCart(
-                                                usedId: FirebaseAuthService()
-                                                    .currentUser!
-                                                    .id,
-                                                cafeteriaName:
-                                                    menuItem.cafeteria,
-                                                foodItemId:
-                                                    menuItem.menuItemId);
+                                        ? Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 50.h),
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                if (menuItem
+                                                        .availabilityStatus ==
+                                                    "Yes") {
+                                                  _dataService.addToCart(
+                                                      usedId:
+                                                          FirebaseAuthService()
+                                                              .currentUser!
+                                                              .id,
+                                                      cafeteriaName:
+                                                          menuItem.cafeteria,
+                                                      foodItemId:
+                                                          menuItem.menuItemId);
 
-                                            _dataService
-                                                .allCartItems(
-                                                    userId:
-                                                        FirebaseAuthService()
-                                                            .currentUser!
-                                                            .id,
-                                                    cafeteria:
-                                                        menuItem.cafeteria)
-                                                .length
-                                                .then(
-                                                    (value) => print("value"));
+                                                  _dataService
+                                                      .allCartItems(
+                                                          userId:
+                                                              FirebaseAuthService()
+                                                                  .currentUser!
+                                                                  .id,
+                                                          cafeteria: menuItem
+                                                              .cafeteria)
+                                                      .length
+                                                      .then((value) =>
+                                                          print("value"));
 
                                                   final snackbar = SnackBar(
                                                     // duration: const Duration(seconds: 5),
@@ -217,19 +261,21 @@ class _FoodGridScreenState extends State<FoodGridScreen> {
                               SizedBox(height: 10.v),
                             ],
                           ),
-                        );
-                      }));
-            } else {
+                        ),
+                      );
+                    });
+              } else {
+                // showLoadingDialog(context: context, text: "Please wait");
+                debugPrint("Active, no data");
+                return const CircularProgressIndicator();
+              }
+            default:
               // showLoadingDialog(context: context, text: "Please wait");
-              debugPrint("Active, no data");
+              debugPrint("Not active");
               return const CircularProgressIndicator();
-            }
-          default:
-            // showLoadingDialog(context: context, text: "Please wait");
-            debugPrint("Not active");
-            return const CircularProgressIndicator();
-        }
-      },
+          }
+        },
+      ),
     );
   }
 }

@@ -111,13 +111,6 @@ class _AddFoodItemScreenState extends State<AddFoodItemScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
-          ),
-          title: Text('Upload Menu Item'),
-          backgroundColor: const Color(0xFF6B0808)),
       body: Center(
         child: SingleChildScrollView(
           child: Form(

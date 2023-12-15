@@ -240,7 +240,7 @@ class _BezierPainter extends CustomPainter {
 
 final _processes = [
   'Placed Order',
-  'Payment confirmed',
+  'Order Received',
   'Order in Queue',
   'Order Prepared',
   'Order Done',

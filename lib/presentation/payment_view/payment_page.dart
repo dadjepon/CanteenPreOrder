@@ -43,10 +43,19 @@ class PaymentPage extends StatefulWidget {
 
     required this.cafeteria,
 
+    required this.userId,
+
+    required this.delivery,
+
+    required this.location,
+
   });
 
 
   final String amount;
+
+
+  final String userId;
 
 
   final String email;
@@ -59,6 +68,12 @@ class PaymentPage extends StatefulWidget {
 
 
   final String cafeteria;
+
+
+  final String delivery;
+
+
+  final String location;
 
 
   @override
@@ -203,6 +218,10 @@ class _PaymentPage extends State<PaymentPage> {
 
           await _dataService.fromCartToOrders(
 
+              delivery: widget.delivery,
+
+              location: widget.location,
+
               userId: FirebaseAuthService().currentUser!.id,
 
               orderId: widget.orderId,
@@ -211,9 +230,11 @@ class _PaymentPage extends State<PaymentPage> {
 
               amount: widget.amount,
 
-              orderStage: '1',
+              orderStage: '0',
 
               cafeteria: widget.cafeteria,
+
+              email: widget.email,
 
               timestamp: timestamp.toString());
 

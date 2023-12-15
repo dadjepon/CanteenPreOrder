@@ -159,7 +159,9 @@ class _FoodAppHomeState extends State<FoodAppHome>
                   ),
                 )
               : Text(""),
-          Expanded(
+          Container(
+            height: 0.79 * MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
             child: TabBarView(
               controller: _tabController,
               children: [
