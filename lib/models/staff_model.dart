@@ -7,15 +7,13 @@ class StaffItem {
   final String documentId;
   final String customerEmail;
   final String customerName;
-  final String customerPhoneNumber;
   final String institutionId;
   final String cafeteria;
 
-  StaffItem(this.cafeteria, {
+  StaffItem({ required this.cafeteria,
     required this.documentId,
     required this.customerEmail,
     required this.customerName,
-    required this.customerPhoneNumber,
     required this.institutionId,
   });
 
@@ -25,6 +23,5 @@ class StaffItem {
         customerEmail = snapshot.data()[customerEmailField],
         customerName = snapshot.data()[customerNameField],
         institutionId = snapshot.data()[institutionIdField],
-        customerPhoneNumber = snapshot.data()[customerPhoneNumberField],
         cafeteria = snapshot.data()[cafeteriaField];
 }
