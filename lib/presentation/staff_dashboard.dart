@@ -21,7 +21,7 @@ class _FoodAppHomeState extends State<StaffDashboardScreen> with SingleTickerPro
   final List<String> _filterOptions = ['To be Processed', 'Processing', 'Processed', 'Done'];
   String cafeteria = "";
   late final DatabaseService databaseService;
-  int _selectedFilter = 1;
+  int _selectedFilter = 0;
   int _activeIndex = 0;
 
   @override
@@ -53,6 +53,8 @@ class _FoodAppHomeState extends State<StaffDashboardScreen> with SingleTickerPro
 
   @override
   Widget build(BuildContext context) {
+    print(_selectedFilter.toString());
+    print(cafeteria);
     Stream<Iterable<MenuItem>> currStream = databaseService.foodsInCafeteria(cafeteria);
     Stream<Iterable<OrderItem>> ordersCurrStream = databaseService.foodOrdersByStage(cafeteria, _selectedFilter.toString());
 
