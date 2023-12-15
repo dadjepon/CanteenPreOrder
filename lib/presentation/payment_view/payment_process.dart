@@ -207,6 +207,7 @@ class PaymentProcess {
               onPressed: () {
                 // Add logic to process mobile money payment
                 _processMobileMoneyPayment(context);
+                Navigator.of(context).pop();
               },
               child: Text('Proceed',
                   style: GoogleFonts.ubuntu(
@@ -267,24 +268,6 @@ class PaymentProcess {
         );
       },
     );
-  }
-
-  void _handleNextClick(BuildContext context) {
-    if (selectedDeliveryOption == 'Delivery') {
-      showLocationEntryDialog(context);
-    } else {
-      _redirectToPaymentPage();
-    }
-  }
-
-  void _handlePaymentNextClick(String deliveryOption, BuildContext context) {
-    if (selectedPaymentMethod == 'Mobile Money Payment') {
-      // Redirect to the page for mobile money payment
-      _redirectToMobileMoneyPaymentPage();
-    } else {
-      // Show information about the policy (e.g., crime for not showing up)
-      showPolicyInformation(context);
-    }
   }
 
   void _processMobileMoneyPayment(context) {

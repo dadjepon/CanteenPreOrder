@@ -283,6 +283,8 @@ class _AddFoodItemScreenState extends State<AddFoodItemScreen> {
     _foodDescriptionController.dispose();
     _priceController.dispose();
     _foodNameController.dispose();
+    _statusController.dispose();
+    _menuTypeController.dispose();
     super.dispose();
   }
 }

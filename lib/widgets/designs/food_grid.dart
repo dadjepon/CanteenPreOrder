@@ -1,6 +1,6 @@
 import 'package:canteen_preorderapp/core/app_export.dart';
 import 'package:canteen_preorderapp/models/auth_service/firebase_service.dart';
-import 'package:canteen_preorderapp/models/menu_item.dart' as MenuModel; // Use 'as' to rename the import
+import 'package:canteen_preorderapp/models/menu_item.dart'; // Use 'as' to rename the import
 import 'package:canteen_preorderapp/models/database_service.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +9,7 @@ class FoodGridScreen extends StatefulWidget {
   const FoodGridScreen(
       {super.key, required this.currStream, required this.page});
 
-  final Stream<Iterable<MenuModel.MenuItem>> currStream; // Use the renamed import here
+  final Stream<Iterable<MenuItem>> currStream; // Use the renamed import here
   final String page;
 
   @override
@@ -247,7 +247,7 @@ class _FoodGridScreenState extends State<FoodGridScreen> {
                                           )
                                         : Padding(
                                             padding:
-                                                EdgeInsets.only(left: 50.h),
+                                                EdgeInsets.only(left: 40.h),
                                             child: ElevatedButton(
                                               onPressed: () async {
                                                 _dataService.removeFromMenu(

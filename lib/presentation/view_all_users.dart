@@ -337,25 +337,13 @@ class _UserListScreenState extends State<UserListScreen> {
                           } else {
                             try {
                               _createNewUser(
-                                  nameController.text,
-                                  emailController.text,
-                                  phoneNumberController.text,
-                                  instIDController.text,
-                                  passwordController.text,
-                                  cafeteriaController.text,
-                                  roleController.text);
-
-                              final snackbar = SnackBar(
-                                duration: const Duration(seconds: 5),
-                                content: Text(
-                                  'Almost done, Please wait...',
-                                  style: GoogleFonts.ubuntu(
-                                    color: Color.fromARGB(255, 105, 4, 4),
-                                  ),
-                                ),
-                                backgroundColor: Colors.white,
-                                elevation: 5,
-                              );
+                                  name: nameController.text,
+                                  email: emailController.text,
+                                  phoneNumber: phoneNumberController.text,
+                                  instID: instIDController.text,
+                                  password: passwordController.text,
+                                  cafeteria: cafeteriaController.text,
+                                  role: roleController.text);
                             } on WeakPasswordAuthException {
                               await showErrorDialog(
                                 context,
@@ -400,8 +388,14 @@ class _UserListScreenState extends State<UserListScreen> {
     );
   }
 
-  _createNewUser(String name, String email, String cafeteria, String instID,
-      String phoneNumber, String password, String role) async {
+  _createNewUser(
+      {required String name,
+      required String email,
+      required String cafeteria,
+      required String instID,
+      required String phoneNumber,
+      required String password,
+      required String role}) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(

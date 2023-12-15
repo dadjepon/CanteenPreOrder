@@ -126,7 +126,7 @@ class _FoodAppHomeState extends State<FoodAppHome>
                   ),
                 )
               : Text(""),
-          _activeIndex != 2
+          _activeIndex != 2 && _activeIndex != 3
               ? Container(
                   height: 40,
                   child: ListView(

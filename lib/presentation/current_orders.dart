@@ -77,6 +77,14 @@ class _CurrentOrdersScreenState extends State<CurrentOrdersScreen> {
                           ),
                           Center(
                             child: Text(
+                              "Cafeteria: " + orderItem.cafeteria,
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0XFFE78F0B)),
+                            ),
+                          ),
+                          Center(
+                            child: Text(
                               "OrderID: " + orderItem.orderId,
                               style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.bold,
@@ -86,6 +94,14 @@ class _CurrentOrdersScreenState extends State<CurrentOrdersScreen> {
                           Center(
                             child: Text(
                               "Time placed: " + orderItem.timestamp,
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0XFFE78F0B)),
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              "Delivery Option: " + orderItem.deliveryOption,
                               style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.bold,
                                   color: Color(0XFFE78F0B)),

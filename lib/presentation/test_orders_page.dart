@@ -7,7 +7,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class OrdersList extends StatefulWidget {
-  OrdersList({Key? key, required this.currStage,  }) : super(key: key);
+  OrdersList({
+    Key? key,
+    required this.currStage,
+  }) : super(key: key);
 
   final Stream<Iterable<OrderItem>> currStage;
 
@@ -16,21 +19,21 @@ class OrdersList extends StatefulWidget {
 }
 
 class _OrdersListState extends State<OrdersList> {
-  late final FirebaseFirestore _firestore;
   String? cafeteria; // Allow for a nullable cafeteria
   late final DatabaseService _databaseService;
 
   @override
   void initState() {
-    _firestore = FirebaseFirestore.instance;
     _databaseService = DatabaseService();
     getUserCafeteria();
     super.initState();
   }
 
   void getUserCafeteria() async {
-    StaffItem staffItem = await _databaseService.getStaff(userId: FirebaseAuthService().currentUser!.id);
-    if (staffItem.cafeteria.isNotEmpty) { // Ensure we have a non-empty cafeteria value
+    StaffItem staffItem = await _databaseService.getStaff(
+        userId: FirebaseAuthService().currentUser!.id);
+    if (staffItem.cafeteria.isNotEmpty) {
+      // Ensure we have a non-empty cafeteria value
       setState(() {
         cafeteria = staffItem.cafeteria;
       });
@@ -40,19 +43,27 @@ class _OrdersListState extends State<OrdersList> {
   Future<void> updateOrderStage(OrderItem document) async {
     int currentStage = int.tryParse(document.orderStage as String? ?? '0') ?? 0;
     if (currentStage < 4) {
-      FirebaseFirestore.instance.collection('canteenOrdersCollection').doc('canteenOrders').collection(document.cafeteria).where(FieldPath.documentId, isEqualTo: document.docId).get().then((orderItem) {
-        orderItem.docs.first.reference.update({'orderStage': (currentStage + 1).toString()});
-        
-        
+      FirebaseFirestore.instance
+          .collection('canteenOrdersCollection')
+          .doc('canteenOrders')
+          .collection(document.cafeteria)
+          .where(FieldPath.documentId, isEqualTo: document.docId)
+          .get()
+          .then((orderItem) {
+        orderItem.docs.first.reference
+            .update({'orderStage': (currentStage + 1).toString()});
       });
 
-      FirebaseFirestore.instance.collection('ordersCollection').doc(document.orderId.split("_")[1]).collection(document.orderId.split("_")[1]).where("orderId", isEqualTo: document.orderId).get().then((orderItem) {
-        
-        orderItem.docs.first.reference.update({'orderStage': (currentStage + 1).toString()});
-        
-        
+      FirebaseFirestore.instance
+          .collection('ordersCollection')
+          .doc(document.orderId.split("_")[1])
+          .collection(document.orderId.split("_")[1])
+          .where("orderId", isEqualTo: document.orderId)
+          .get()
+          .then((orderItem) {
+        orderItem.docs.first.reference
+            .update({'orderStage': (currentStage + 1).toString()});
       });
-      
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('This food is already served successfully')),
@@ -62,7 +73,7 @@ class _OrdersListState extends State<OrdersList> {
 
   @override
   Widget build(BuildContext context) {
-        if (cafeteria == null || cafeteria!.isEmpty) {
+    if (cafeteria == null || cafeteria!.isEmpty) {
       // Show a loading indicator or return an empty Container while waiting for cafeteria to be set
       return Center(child: CircularProgressIndicator());
     }
@@ -71,7 +82,6 @@ class _OrdersListState extends State<OrdersList> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
-
             final orderItems = snapshot.data as Iterable<OrderItem>;
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -80,19 +90,20 @@ class _OrdersListState extends State<OrdersList> {
               ),
               itemCount: orderItems.length,
               itemBuilder: (context, index) {
-                final  orderDocument = orderItems.elementAt(index);
-                
+                final orderDocument = orderItems.elementAt(index);
+
                 return OrderCard(
-                  personEmail:  orderDocument.orderComponents[0]['foodName'],
-                  personName:  orderDocument.orderComponents[0]['foodName'],
-                  personPhoneNumber:  orderDocument.orderComponents[0]['foodName'],
+                  personEmail: orderDocument.orderComponents[0]['foodName'],
+                  personName: orderDocument.orderComponents[0]['foodName'],
+                  personPhoneNumber: orderDocument.orderComponents[0]
+                      ['foodName'],
                   foodName: orderDocument.orderComponents[0]['foodName'],
-                  foodDescription:  orderDocument.orderComponents[0]['foodDescription'],
+                  foodDescription: orderDocument.orderComponents[0]
+                      ['foodDescription'],
                   foodImage: orderDocument.orderComponents[0]['foodImage'],
                   price: orderDocument.orderComponents[0]['price'].toString(),
                   orderItem: orderDocument,
                   onupdate: () => updateOrderStage(orderDocument),
-
                 );
               },
             );
@@ -148,25 +159,35 @@ class OrderCard extends StatelessWidget {
             Expanded(
               child: CachedNetworkImage(
                 imageUrl: foodImage,
-                placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                placeholder: (context, url) =>
+                    Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) => Icon(Icons.error),
                 fit: BoxFit.cover,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(foodName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+              child: Text(foodName,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white)),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(foodDescription, style: TextStyle(color: Colors.white)),
+              child:
+                  Text(foodDescription, style: TextStyle(color: Colors.white)),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Ghc $price', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
+                  Text('Ghc $price',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green)),
                   IconButton(
                     icon: Icon(Icons.update, color: Colors.white),
                     onPressed: onupdate,
@@ -187,7 +208,8 @@ class OrderCard extends StatelessWidget {
       builder: (BuildContext context) {
         var ordersArray = [];
         for (int i = 0; i < orderItem.orderComponents.length; i++) {
-            ordersArray.add("${orderItem.orderComponents[i]['quantity']} - ${orderItem.orderComponents[i]['foodName']}");
+          ordersArray.add(
+              "${orderItem.orderComponents[i]['quantity']} - ${orderItem.orderComponents[i]['foodName']}");
         }
         return AlertDialog(
           title: Text('Additional Information'),
